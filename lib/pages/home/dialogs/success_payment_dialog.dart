@@ -1,12 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
-
-import '../../../../components/components.dart';
-import '../../../../core/core.dart';
-import '../bloc/bloc/checkout_bloc.dart';
 import '../models/cwb_print.dart';
 import '../models/order_item.dart';
+import '../../../../core/core.dart';
+import 'package:flutter/material.dart';
+import '../bloc/bloc/checkout_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../components/components.dart';
+import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 
 class SuccessPaymentDialog extends StatefulWidget {
   const SuccessPaymentDialog({super.key});
@@ -16,7 +15,6 @@ class SuccessPaymentDialog extends StatefulWidget {
 }
 
 class _SuccessPaymentDialogState extends State<SuccessPaymentDialog> {
-
   List<OrderItem> data = [];
   int totalQty = 0;
   int totalPrice = 0;
@@ -57,21 +55,33 @@ class _SuccessPaymentDialogState extends State<SuccessPaymentDialog> {
               builder: (context, state) {
                 final price = state.maybeWhen(
                   orElse: () => 0,
-                  success: (products, qty, price) => price,
+                  loaded: (products) => products.fold<int>(
+                      0,
+                      (previousValue, element) =>
+                          previousValue +
+                          (element.product.price!.toIntegerFromText *
+                              element.qty)),
                 );
                 final tax = price * 0.11;
                 final total = price + tax;
-                data = state.maybeWhen(
-                  orElse: () => [],
-                  success: (products, qty, price) => products,
-                );
+                // data = state.maybeWhen(
+                //   orElse: () => [],
+                //   loaded: (products) => products,
+                // );
                 totalQty = state.maybeWhen(
                   orElse: () => 0,
-                  success: (products, qty, price) => qty,
+                  loaded: (products) => products.fold(0,
+                      (previousValue, element) => previousValue + element.qty),
                 );
                 totalPrice = state.maybeWhen(
                   orElse: () => 0,
-                  success: (products, qty, price) => price,
+                  loaded: (products) => products.fold(
+                                      0,
+                                      (previousValue, element) =>
+                                          previousValue +
+                                          (element.product.price!
+                                                  .toIntegerFromText *
+                                              element.qty)),
                 );
                 return Text(
                   total.ceil().currencyFormatRp,
@@ -90,7 +100,13 @@ class _SuccessPaymentDialogState extends State<SuccessPaymentDialog> {
               builder: (context, state) {
                 final price = state.maybeWhen(
                   orElse: () => 0,
-                  success: (products, qty, price) => price,
+                  loaded: (products) => products.fold(
+                                      0,
+                                      (previousValue, element) =>
+                                          previousValue +
+                                          (element.product.price!
+                                                  .toIntegerFromText *
+                                              element.qty)),
                 );
                 final tax = price * 0.11;
                 final total = price + tax;
@@ -107,9 +123,9 @@ class _SuccessPaymentDialogState extends State<SuccessPaymentDialog> {
             const SpaceHeight(8.0),
             const Text('WAKTU PEMBAYARAN'),
             const SpaceHeight(5.0),
-            const Text(
-              '22 Januari, 11:17',
-              style: TextStyle(
+             Text(
+              DateTime.now().toFormattedDate(),
+              style:const TextStyle(
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -130,17 +146,17 @@ class _SuccessPaymentDialogState extends State<SuccessPaymentDialog> {
                 const SpaceWidth(8.0),
                 Flexible(
                   child: Button.filled(
-                    onPressed: () async{
-                      final printValue =
-                                await CwbPrint.instance.printOrder(
-                              data,
-                              totalQty,
-                              totalPrice,
-                              'Tunai',
-                              totalPrice,
-                              'Bahri',
-                            );
-                            await PrintBluetoothThermal.writeBytes(printValue);
+                    onPressed: () async {
+                      // final printValue =
+                      //           await CwbPrint.instance.printOrder(
+                      //         data,
+                      //         totalQty,
+                      //         totalPrice,
+                      //         'Tunai',
+                      //         totalPrice,
+                      //         'Bahri',
+                      //       );
+                      //       await PrintBluetoothThermal.writeBytes(printValue);
                     },
                     label: 'Print',
                   ),

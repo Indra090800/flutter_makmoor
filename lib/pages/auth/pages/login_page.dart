@@ -1,11 +1,15 @@
 import '../../../core/core.dart';
+import '../login/login_bloc.dart';
 import 'package:flutter/material.dart';
 import '../../../components/spaces.dart';
 import '../../../components/buttons.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../core/assets/assets.gen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../home/pages/main_nav_desktop.dart';
 import '../../../components/custom_text_field.dart';
+import '../../../data/datasource/auth_local_datasource.dart';
+
 
 
 class LoginPage extends StatefulWidget {
@@ -16,12 +20,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
   @override
   void dispose() {
-    usernameController.dispose();
+    emailController.dispose();
     passwordController.dispose();
     super.dispose();
   }
@@ -44,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
           const SpaceHeight(24.0),
           const Center(
             child: Text(
-              'LOGIN - MAKMOOR',
+              'MAKMOOR APPS',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -65,8 +69,8 @@ class _LoginPageState extends State<LoginPage> {
           ),
           const SpaceHeight(40.0),
           CustomTextField(
-            controller: usernameController,
-            label: 'Username',
+            controller: emailController,
+            label: 'Email',
           ),
           const SpaceHeight(12.0),
           CustomTextField(
@@ -75,16 +79,53 @@ class _LoginPageState extends State<LoginPage> {
             obscureText: true,
           ),
           const SpaceHeight(24.0),
-          Button.filled(
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const MainNavDesktop(),
-                ),
+          BlocListener<LoginBloc, LoginState>(
+            listener: (context, state) {
+              state.maybeWhen(
+                orElse: () {},
+                success: (authResponseModel) {
+                  AuthLocalDataSource().saveAuthData(authResponseModel);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MainNavDesktop(),
+                    ),
+                  );
+                },
+                error: (message) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(message),
+                      backgroundColor: AppColors.red,
+                    ),
+                  );
+                },
               );
             },
-            label: 'Masuk',
+            child: BlocBuilder<LoginBloc, LoginState>(
+              builder: (context, state) {
+                return state.maybeWhen(
+                  orElse: () {
+                    return Button.filled(
+                      onPressed: () {
+                        context.read<LoginBloc>().add(
+                              LoginEvent.login(
+                                email: emailController.text,
+                                password: passwordController.text,
+                              ),
+                            );
+                      },
+                      label: 'Masuk',
+                    );
+                  },
+                  loading: () {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                );
+              },
+            ),
           ),
         ],
       ),

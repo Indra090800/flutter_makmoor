@@ -144,7 +144,7 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
                               orElse: () => const Center(
                                 child: Text('No Items'),
                               ),
-                              success: (products, qty, price) {
+                              loaded: (products) {
                                 if (products.isEmpty) {
                                   return const Center(
                                     child: Text('No Items'),
@@ -242,7 +242,13 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
                               builder: (context, state) {
                                 final price = state.maybeWhen(
                                   orElse: () => 0,
-                                  success: (products, qty, price) => price,
+                                  loaded: (products) => products.fold(
+                                      0,
+                                      (previousValue, element) =>
+                                          previousValue +
+                                          (element.product.price!
+                                                  .toIntegerFromText *
+                                              element.qty)),
                                 );
                                 return Text(
                                   price.currencyFormatRp,
@@ -270,7 +276,13 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
                               builder: (context, state) {
                                 final price = state.maybeWhen(
                                   orElse: () => 0,
-                                  success: (products, qty, price) => price,
+                                  loaded: (products) => products.fold(
+                                      0,
+                                      (previousValue, element) =>
+                                          previousValue +
+                                          (element.product.price!
+                                                  .toIntegerFromText *
+                                              element.qty)),
                                 );
                                 final tax = price * 0.11;
                                 final total = price + tax;

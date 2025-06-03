@@ -26,16 +26,16 @@ class ColumnButton extends StatelessWidget {
             width: 40.0,
             decoration: BoxDecoration(
               color: AppColors.white,
-              border: Border.all(color: AppColors.primary),
+              border: Border.all(color: AppColors.green),
               borderRadius: const BorderRadius.all(Radius.circular(8.0)),
             ),
-            child: svgGenImage.svg(),
+            child: svgGenImage.svg(color: AppColors.green),
           ),
           const SpaceHeight(8.0),
           Text(
             label,
             style: const TextStyle(
-              color: AppColors.primary,
+              color: AppColors.green,
               fontSize: 12,
               fontWeight: FontWeight.w500,
             ),

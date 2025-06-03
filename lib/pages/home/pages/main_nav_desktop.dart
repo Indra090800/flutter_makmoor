@@ -3,9 +3,12 @@ import '../widgets/nav_item.dart';
 import 'manage_printer_page.dart';
 import '../../../../core/core.dart';
 import 'package:flutter/material.dart';
+import '../../auth/pages/login_page.dart';
+import '../../auth/logout/logout_bloc.dart';
 import '../../report/pages/report_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../settings/pages/settings_page.dart';
-
+import '../../../data/datasource/auth_local_datasource.dart';
 
 class MainNavDesktop extends StatefulWidget {
   const MainNavDesktop({super.key});
@@ -61,10 +64,39 @@ class _MainNavDesktopState extends State<MainNavDesktop> {
                           isActive: _selectedIndex == 3,
                           onTap: () => _onItemTapped(3),
                         ),
-                        NavItem(
-                          iconPath: Assets.icons.logout.path,
-                          isActive: false,
-                          onTap: () {},
+                        BlocListener<LogoutBloc, LogoutState>(
+                          listener: (context, state) {
+                            state.maybeMap(
+                                orElse: () {},
+                                error: (e) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text(e.message),
+                                    backgroundColor: AppColors.red,
+                                  ));
+                                },
+                                success: (value) {
+                                  AuthLocalDataSource().removeAuthData();
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text('Logout Success'),
+                                    backgroundColor: AppColors.green,
+                                  ));
+                                  Navigator.pushReplacement(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return const LoginPage();
+                                  }));
+                                });
+                          },
+                          child: NavItem(
+                            iconPath: Assets.icons.logout.path,
+                            isActive: false,
+                            onTap: () {
+                              context
+                                  .read<LogoutBloc>()
+                                  .add(const LogoutEvent.logout());
+                            },
+                          ),
                         ),
                       ],
                     ),

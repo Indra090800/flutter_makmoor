@@ -1,6 +1,6 @@
+import '../core/core.dart';
 import 'package:flutter/material.dart';
 
-import '../core/core.dart';
 
 class CustomDatePicker extends StatefulWidget {
   final void Function(DateTime selectedDate)? onDateSelected;
@@ -68,7 +68,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                     decoration: InputDecoration(
                       suffixIcon: Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: Assets.icons.calendar.svg(),
+                        child: Assets.icons.calendar.svg(color: AppColors.green),
                       ),
                       prefix: widget.prefix,
                       border: OutlineInputBorder(

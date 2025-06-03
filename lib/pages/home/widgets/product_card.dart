@@ -2,11 +2,13 @@ import '../../../../core/core.dart';
 import '../models/product_model.dart';
 import 'package:flutter/material.dart';
 import '../bloc/bloc/checkout_bloc.dart';
+import '../../../core/constants/variable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../components/components.dart';
+import '../../../data/model/response/product_response_model.dart';
 
 class ProductCard extends StatelessWidget {
-  final ProductModel data;
+  final Product data;
   final VoidCallback onCartButton;
 
   const ProductCard({
@@ -44,18 +46,23 @@ class ProductCard extends StatelessWidget {
                   ),
                   child: ClipRRect(
                     borderRadius: const BorderRadius.all(Radius.circular(40.0)),
-                    child: Image.asset(
-                      data.image,
+                    child: Image.network(
+                      data.image!.contains('http')
+                          ? data.image!
+                          : '${Variable.baseUrl}/${data.image}',
                       width: 50,
                       height: 50,
                       fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Icon(Icons.broken_image); // or a placeholder
+                      },
                     ),
                   ),
                 ),
                 const Spacer(),
                 FittedBox(
                   child: Text(
-                    data.name,
+                    data.name ?? '-',
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
@@ -71,7 +78,7 @@ class ProductCard extends StatelessWidget {
                     Flexible(
                       child: FittedBox(
                         child: Text(
-                          data.category.value,
+                          data.category!.name!,
                           style: const TextStyle(
                             color: AppColors.grey,
                             fontSize: 12,
@@ -82,7 +89,7 @@ class ProductCard extends StatelessWidget {
                     Flexible(
                       child: FittedBox(
                         child: Text(
-                          data.priceFormat,
+                          data.price!.toIntegerFromText.currencyFormatRp,
                           style: const TextStyle(
                             fontWeight: FontWeight.w700,
                             fontSize: 12,
@@ -98,28 +105,28 @@ class ProductCard extends StatelessWidget {
               builder: (context, state) {
                 return state.maybeWhen(
                   orElse: () => const SizedBox(),
-                  success: (products, qty, price) {
-                    if (qty == 0) {
-                      return Align(
-                        alignment: Alignment.topRight,
-                        child: Container(
-                          width: 36,
-                          height: 36,
-                          padding: const EdgeInsets.all(6),
-                          decoration: const BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(9.0)),
-                            color: AppColors.green,
-                          ),
-                          child: Assets.icons.shoppingBasket.svg(),
-                        ),
-                      );
-                    }
+                  loaded: (products) {
+                    // if (qty == 0) {
+                    //   return Align(
+                    //     alignment: Alignment.topRight,
+                    //     child: Container(
+                    //       width: 36,
+                    //       height: 36,
+                    //       padding: const EdgeInsets.all(6),
+                    //       decoration: const BoxDecoration(
+                    //         borderRadius:
+                    //             BorderRadius.all(Radius.circular(9.0)),
+                    //         color: AppColors.green,
+                    //       ),
+                    //       child: Assets.icons.shoppingBasket.svg(),
+                    //     ),
+                    //   );
+                    // }
                     return products.any((element) => element.product == data)
                         ? products
                                     .firstWhere(
                                         (element) => element.product == data)
-                                    .quantity >
+                                    .qty >
                                 0
                             ? Align(
                                 alignment: Alignment.topRight,
@@ -137,7 +144,7 @@ class ProductCard extends StatelessWidget {
                                       products
                                           .firstWhere((element) =>
                                               element.product == data)
-                                          .quantity
+                                          .qty
                                           .toString(),
                                       style: const TextStyle(
                                           color: Colors.white,

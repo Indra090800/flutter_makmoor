@@ -1,3 +1,4 @@
+import 'sync_data_page.dart';
 import '../../../../core/core.dart';
 import '../widgets/manage_tax.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +50,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   const SpaceHeight(16.0),
                   ListTile(
                     contentPadding: const EdgeInsets.all(12.0),
-                    leading: Assets.icons.kelolaDiskon.svg(),
+                    leading: Assets.icons.kelolaDiskon.svg(color: AppColors.green),
                     title: const Text('Kelola Diskon'),
                     subtitle: const Text('Kelola Diskon Pelanggan'),
                     textColor: AppColors.green,
@@ -60,7 +61,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   ListTile(
                     contentPadding: const EdgeInsets.all(12.0),
-                    leading: Assets.icons.kelolaPrinter.svg(),
+                    leading: Assets.icons.kelolaPrinter.svg(color: AppColors.green),
                     title: const Text('Kelola Printer'),
                     subtitle: const Text('Tambah atau hapus printer'),
                     textColor: AppColors.green,
@@ -71,7 +72,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   ListTile(
                     contentPadding: const EdgeInsets.all(12.0),
-                    leading: Assets.icons.kelolaPajak.svg(),
+                    leading: Assets.icons.kelolaPajak.svg(color: AppColors.green),
                     title: const Text('Perhitungan Biaya'),
                     subtitle: const Text('Kelola biaya diluar biaya modal'),
                     textColor: AppColors.green,
@@ -79,6 +80,17 @@ class _SettingsPageState extends State<SettingsPage> {
                         ? AppColors.blueLight
                         : Colors.transparent,
                     onTap: () => indexValue(2),
+                  ),
+                  ListTile(
+                    contentPadding: const EdgeInsets.all(12.0),
+                    leading: Assets.icons.layanan.svg(color: AppColors.green),
+                    title: const Text('Sync Data'),
+                    subtitle: const Text('Sinkronisasi data dari dan ke server'),
+                    textColor: AppColors.green,
+                    tileColor: currentIndex == 3
+                        ? AppColors.blueLight
+                        : Colors.transparent,
+                    onTap: () => indexValue(3),
                   ),
                 ],
               ),
@@ -98,6 +110,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ManageDiscount(),
                     ManagePrinterPage(),
                     ManageTax(),
+                    SyncDataPage(),
                   ],
                 ),
               ),

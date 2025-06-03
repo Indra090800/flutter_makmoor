@@ -4,7 +4,7 @@ part of 'checkout_bloc.dart';
 class CheckoutEvent with _$CheckoutEvent {
   const factory CheckoutEvent.started() = _Started;
   //addproduct
-  const factory CheckoutEvent.addProduct(ProductModel product) = _AddProduct;
+  const factory CheckoutEvent.addProduct(Product product) = _AddProduct;
   //removeproduct
-  const factory CheckoutEvent.removeProduct(ProductModel product) = _RemoveProduct;
+  const factory CheckoutEvent.removeProduct(Product product) = _RemoveProduct;
 }
