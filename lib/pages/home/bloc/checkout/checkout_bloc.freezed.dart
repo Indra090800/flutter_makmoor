@@ -493,9 +493,6 @@ mixin _$CheckoutState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<ProductQuantity> items) loaded,
-    required TResult Function(
-            List<OrderItem> products, int totalQuantity, int totalPrice)
-        success,
     required TResult Function(String message) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -504,9 +501,6 @@ mixin _$CheckoutState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<ProductQuantity> items)? loaded,
-    TResult? Function(
-            List<OrderItem> products, int totalQuantity, int totalPrice)?
-        success,
     TResult? Function(String message)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -515,9 +509,6 @@ mixin _$CheckoutState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<ProductQuantity> items)? loaded,
-    TResult Function(
-            List<OrderItem> products, int totalQuantity, int totalPrice)?
-        success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) =>
@@ -527,7 +518,6 @@ mixin _$CheckoutState {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
-    required TResult Function(_Success value) success,
     required TResult Function(_Error value) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -536,7 +526,6 @@ mixin _$CheckoutState {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_Success value)? success,
     TResult? Function(_Error value)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -545,7 +534,6 @@ mixin _$CheckoutState {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
-    TResult Function(_Success value)? success,
     TResult Function(_Error value)? error,
     required TResult orElse(),
   }) =>
@@ -617,9 +605,6 @@ class _$InitialImpl implements _Initial {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<ProductQuantity> items) loaded,
-    required TResult Function(
-            List<OrderItem> products, int totalQuantity, int totalPrice)
-        success,
     required TResult Function(String message) error,
   }) {
     return initial();
@@ -631,9 +616,6 @@ class _$InitialImpl implements _Initial {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<ProductQuantity> items)? loaded,
-    TResult? Function(
-            List<OrderItem> products, int totalQuantity, int totalPrice)?
-        success,
     TResult? Function(String message)? error,
   }) {
     return initial?.call();
@@ -645,9 +627,6 @@ class _$InitialImpl implements _Initial {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<ProductQuantity> items)? loaded,
-    TResult Function(
-            List<OrderItem> products, int totalQuantity, int totalPrice)?
-        success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -663,7 +642,6 @@ class _$InitialImpl implements _Initial {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
-    required TResult Function(_Success value) success,
     required TResult Function(_Error value) error,
   }) {
     return initial(this);
@@ -675,7 +653,6 @@ class _$InitialImpl implements _Initial {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_Success value)? success,
     TResult? Function(_Error value)? error,
   }) {
     return initial?.call(this);
@@ -687,7 +664,6 @@ class _$InitialImpl implements _Initial {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
-    TResult Function(_Success value)? success,
     TResult Function(_Error value)? error,
     required TResult orElse(),
   }) {
@@ -746,9 +722,6 @@ class _$LoadingImpl implements _Loading {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<ProductQuantity> items) loaded,
-    required TResult Function(
-            List<OrderItem> products, int totalQuantity, int totalPrice)
-        success,
     required TResult Function(String message) error,
   }) {
     return loading();
@@ -760,9 +733,6 @@ class _$LoadingImpl implements _Loading {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<ProductQuantity> items)? loaded,
-    TResult? Function(
-            List<OrderItem> products, int totalQuantity, int totalPrice)?
-        success,
     TResult? Function(String message)? error,
   }) {
     return loading?.call();
@@ -774,9 +744,6 @@ class _$LoadingImpl implements _Loading {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<ProductQuantity> items)? loaded,
-    TResult Function(
-            List<OrderItem> products, int totalQuantity, int totalPrice)?
-        success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -792,7 +759,6 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
-    required TResult Function(_Success value) success,
     required TResult Function(_Error value) error,
   }) {
     return loading(this);
@@ -804,7 +770,6 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_Success value)? success,
     TResult? Function(_Error value)? error,
   }) {
     return loading?.call(this);
@@ -816,7 +781,6 @@ class _$LoadingImpl implements _Loading {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
-    TResult Function(_Success value)? success,
     TResult Function(_Error value)? error,
     required TResult orElse(),
   }) {
@@ -908,9 +872,6 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<ProductQuantity> items) loaded,
-    required TResult Function(
-            List<OrderItem> products, int totalQuantity, int totalPrice)
-        success,
     required TResult Function(String message) error,
   }) {
     return loaded(items);
@@ -922,9 +883,6 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<ProductQuantity> items)? loaded,
-    TResult? Function(
-            List<OrderItem> products, int totalQuantity, int totalPrice)?
-        success,
     TResult? Function(String message)? error,
   }) {
     return loaded?.call(items);
@@ -936,9 +894,6 @@ class _$LoadedImpl implements _Loaded {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<ProductQuantity> items)? loaded,
-    TResult Function(
-            List<OrderItem> products, int totalQuantity, int totalPrice)?
-        success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -954,7 +909,6 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
-    required TResult Function(_Success value) success,
     required TResult Function(_Error value) error,
   }) {
     return loaded(this);
@@ -966,7 +920,6 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_Success value)? success,
     TResult? Function(_Error value)? error,
   }) {
     return loaded?.call(this);
@@ -978,7 +931,6 @@ class _$LoadedImpl implements _Loaded {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
-    TResult Function(_Success value)? success,
     TResult Function(_Error value)? error,
     required TResult orElse(),
   }) {
@@ -998,203 +950,6 @@ abstract class _Loaded implements CheckoutState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$SuccessImplCopyWith<$Res> {
-  factory _$$SuccessImplCopyWith(
-          _$SuccessImpl value, $Res Function(_$SuccessImpl) then) =
-      __$$SuccessImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({List<OrderItem> products, int totalQuantity, int totalPrice});
-}
-
-/// @nodoc
-class __$$SuccessImplCopyWithImpl<$Res>
-    extends _$CheckoutStateCopyWithImpl<$Res, _$SuccessImpl>
-    implements _$$SuccessImplCopyWith<$Res> {
-  __$$SuccessImplCopyWithImpl(
-      _$SuccessImpl _value, $Res Function(_$SuccessImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of CheckoutState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? products = null,
-    Object? totalQuantity = null,
-    Object? totalPrice = null,
-  }) {
-    return _then(_$SuccessImpl(
-      null == products
-          ? _value._products
-          : products // ignore: cast_nullable_to_non_nullable
-              as List<OrderItem>,
-      null == totalQuantity
-          ? _value.totalQuantity
-          : totalQuantity // ignore: cast_nullable_to_non_nullable
-              as int,
-      null == totalPrice
-          ? _value.totalPrice
-          : totalPrice // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$SuccessImpl implements _Success {
-  const _$SuccessImpl(
-      final List<OrderItem> products, this.totalQuantity, this.totalPrice)
-      : _products = products;
-
-  final List<OrderItem> _products;
-  @override
-  List<OrderItem> get products {
-    if (_products is EqualUnmodifiableListView) return _products;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_products);
-  }
-
-  @override
-  final int totalQuantity;
-  @override
-  final int totalPrice;
-
-  @override
-  String toString() {
-    return 'CheckoutState.success(products: $products, totalQuantity: $totalQuantity, totalPrice: $totalPrice)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$SuccessImpl &&
-            const DeepCollectionEquality().equals(other._products, _products) &&
-            (identical(other.totalQuantity, totalQuantity) ||
-                other.totalQuantity == totalQuantity) &&
-            (identical(other.totalPrice, totalPrice) ||
-                other.totalPrice == totalPrice));
-  }
-
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(_products),
-      totalQuantity,
-      totalPrice);
-
-  /// Create a copy of CheckoutState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$SuccessImplCopyWith<_$SuccessImpl> get copyWith =>
-      __$$SuccessImplCopyWithImpl<_$SuccessImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(List<ProductQuantity> items) loaded,
-    required TResult Function(
-            List<OrderItem> products, int totalQuantity, int totalPrice)
-        success,
-    required TResult Function(String message) error,
-  }) {
-    return success(products, totalQuantity, totalPrice);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<ProductQuantity> items)? loaded,
-    TResult? Function(
-            List<OrderItem> products, int totalQuantity, int totalPrice)?
-        success,
-    TResult? Function(String message)? error,
-  }) {
-    return success?.call(products, totalQuantity, totalPrice);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<ProductQuantity> items)? loaded,
-    TResult Function(
-            List<OrderItem> products, int totalQuantity, int totalPrice)?
-        success,
-    TResult Function(String message)? error,
-    required TResult orElse(),
-  }) {
-    if (success != null) {
-      return success(products, totalQuantity, totalPrice);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_Loaded value) loaded,
-    required TResult Function(_Success value) success,
-    required TResult Function(_Error value) error,
-  }) {
-    return success(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_Success value)? success,
-    TResult? Function(_Error value)? error,
-  }) {
-    return success?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Loaded value)? loaded,
-    TResult Function(_Success value)? success,
-    TResult Function(_Error value)? error,
-    required TResult orElse(),
-  }) {
-    if (success != null) {
-      return success(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Success implements CheckoutState {
-  const factory _Success(final List<OrderItem> products,
-      final int totalQuantity, final int totalPrice) = _$SuccessImpl;
-
-  List<OrderItem> get products;
-  int get totalQuantity;
-  int get totalPrice;
-
-  /// Create a copy of CheckoutState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$SuccessImplCopyWith<_$SuccessImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -1269,9 +1024,6 @@ class _$ErrorImpl implements _Error {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<ProductQuantity> items) loaded,
-    required TResult Function(
-            List<OrderItem> products, int totalQuantity, int totalPrice)
-        success,
     required TResult Function(String message) error,
   }) {
     return error(message);
@@ -1283,9 +1035,6 @@ class _$ErrorImpl implements _Error {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<ProductQuantity> items)? loaded,
-    TResult? Function(
-            List<OrderItem> products, int totalQuantity, int totalPrice)?
-        success,
     TResult? Function(String message)? error,
   }) {
     return error?.call(message);
@@ -1297,9 +1046,6 @@ class _$ErrorImpl implements _Error {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<ProductQuantity> items)? loaded,
-    TResult Function(
-            List<OrderItem> products, int totalQuantity, int totalPrice)?
-        success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -1315,7 +1061,6 @@ class _$ErrorImpl implements _Error {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
-    required TResult Function(_Success value) success,
     required TResult Function(_Error value) error,
   }) {
     return error(this);
@@ -1327,7 +1072,6 @@ class _$ErrorImpl implements _Error {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_Success value)? success,
     TResult? Function(_Error value)? error,
   }) {
     return error?.call(this);
@@ -1339,7 +1083,6 @@ class _$ErrorImpl implements _Error {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
-    TResult Function(_Success value)? success,
     TResult Function(_Error value)? error,
     required TResult orElse(),
   }) {

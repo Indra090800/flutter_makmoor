@@ -17,10 +17,10 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       var index =
           items.indexWhere((element) => element.product.id == event.product.id);
       if (index != -1) {
-        items[index] =
-            ProductQuantity(product: event.product, qty: items[index].qty + 1);
+        items[index] = ProductQuantity(
+            product: event.product, quantity: items[index].quantity + 1);
       } else {
-        items.add(ProductQuantity(product: event.product, qty: 1));
+        items.add(ProductQuantity(product: event.product, quantity: 1));
       }
       emit(_Loaded(items));
     });
@@ -31,9 +31,9 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       var index =
           items.indexWhere((element) => element.product.id == event.product.id);
       if (index != -1) {
-        if (items[index].qty > 1) {
+        if (items[index].quantity > 1) {
           items[index] = ProductQuantity(
-              product: event.product, qty: items[index].qty - 1);
+              product: event.product, quantity: items[index].quantity - 1);
         } else {
           items.removeAt(index);
         }

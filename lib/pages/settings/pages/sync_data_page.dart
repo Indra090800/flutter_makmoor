@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../bloc/sync_order/sync_order_bloc.dart';
 import '../bloc/sync_product/sync_product_bloc.dart';
 import '../../../data/datasource/product_local_datasource.dart';
 
@@ -16,7 +17,7 @@ class _SyncDataPageState extends State<SyncDataPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sync Data Page'), 
+        title: const Text('Sync Data Page'),
       ),
       body: Column(
         children: [
@@ -65,49 +66,48 @@ class _SyncDataPageState extends State<SyncDataPage> {
               );
             },
           ),
-          //   BlocConsumer<SyncOrderBloc, SyncOrderState>(
-          //     listener: (context, state) {
-          //       state.maybeWhen(
-          //         orElse: () {},
-          //         error: (message) {
-          //           ScaffoldMessenger.of(context).showSnackBar(
-          //             SnackBar(
-          //               content: Text(message),
-          //               backgroundColor: Colors.red,
-          //             ),
-          //           );
-          //         },
-          //         loaded: () {
-          //           ScaffoldMessenger.of(context).showSnackBar(
-          //             const SnackBar(
-          //               content: Text('Sync Order Success'),
-          //               backgroundColor: Colors.green,
-          //             ),
-          //           );
-          //         },
-          //       );
-          //     },
-          //     builder: (context, state) {
-          //       return state.maybeWhen(
-          //         orElse: () {
-          //           return ElevatedButton(
-          //             onPressed: () {
-          //               context
-          //                   .read<SyncOrderBloc>()
-          //                   .add(const SyncOrderEvent.syncOrder());
-          //             },
-          //             child: const Text('Sync Order'),
-          //           );
-          //         },
-          //         loading: () {
-          //           return const Center(
-          //             child: CircularProgressIndicator(),
-          //           );
-          //         },
-          //       );
-          //     },
-          //   )
-          // ],
+          BlocConsumer<SyncOrderBloc, SyncOrderState>(
+            listener: (context, state) {
+              state.maybeWhen(
+                orElse: () {},
+                error: (message) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(message),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                },
+                loaded: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Sync Order Success'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                },
+              );
+            },
+            builder: (context, state) {
+              return state.maybeWhen(
+                orElse: () {
+                  return ElevatedButton(
+                    onPressed: () {
+                      context
+                          .read<SyncOrderBloc>()
+                          .add(const SyncOrderEvent.syncOrder());
+                    },
+                    child: const Text('Sync Order'),
+                  );
+                },
+                loading: () {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              );
+            },
+          )
         ],
       ),
     );

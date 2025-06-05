@@ -1,7 +1,6 @@
 import '../../../../core/core.dart';
-import '../models/product_model.dart';
 import 'package:flutter/material.dart';
-import '../bloc/bloc/checkout_bloc.dart';
+import '../bloc/checkout/checkout_bloc.dart';
 import '../../../core/constants/variable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../components/components.dart';
@@ -106,7 +105,7 @@ class ProductCard extends StatelessWidget {
                 return state.maybeWhen(
                   orElse: () => const SizedBox(),
                   loaded: (products) {
-                    // if (qty == 0) {
+                    // if (quantity == 0) {
                     //   return Align(
                     //     alignment: Alignment.topRight,
                     //     child: Container(
@@ -126,7 +125,7 @@ class ProductCard extends StatelessWidget {
                         ? products
                                     .firstWhere(
                                         (element) => element.product == data)
-                                    .qty >
+                                    .quantity >
                                 0
                             ? Align(
                                 alignment: Alignment.topRight,
@@ -144,7 +143,7 @@ class ProductCard extends StatelessWidget {
                                       products
                                           .firstWhere((element) =>
                                               element.product == data)
-                                          .qty
+                                          .quantity
                                           .toString(),
                                       style: const TextStyle(
                                           color: Colors.white,

@@ -2,12 +2,14 @@ import '../../../../core/core.dart';
 import '../dialogs/tax_dialog.dart';
 import '../widgets/order_menu.dart';
 import '../models/product_model.dart';
+import '../bloc/order/order_bloc.dart';
 import 'package:flutter/material.dart';
 import '../widgets/column_button.dart';
 import '../dialogs/service_dialog.dart';
-import '../bloc/bloc/checkout_bloc.dart';
+import '../models/product_quantity.dart';
 import '../dialogs/discount_dialog.dart';
 import '../models/product_category.dart';
+import '../bloc/checkout/checkout_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../components/components.dart';
 import '../dialogs/success_payment_dialog.dart';
@@ -115,7 +117,7 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
                             SizedBox(
                               width: 50.0,
                               child: Text(
-                                'Qty',
+                                'quantity',
                                 style: TextStyle(
                                   color: AppColors.green,
                                   fontSize: 16,
@@ -248,7 +250,7 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
                                           previousValue +
                                           (element.product.price!
                                                   .toIntegerFromText *
-                                              element.qty)),
+                                              element.quantity)),
                                 );
                                 return Text(
                                   price.currencyFormatRp,
@@ -282,7 +284,7 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
                                           previousValue +
                                           (element.product.price!
                                                   .toIntegerFromText *
-                                              element.qty)),
+                                              element.quantity)),
                                 );
                                 final tax = price * 0.11;
                                 final total = price + tax;
@@ -432,18 +434,37 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
                                   ),
                                 ),
                                 const SpaceWidth(8.0),
-                                Flexible(
-                                  child: Button.filled(
-                                    onPressed: () async {
-                                      await showDialog(
-                                        context: context,
-                                        barrierDismissible: false,
-                                        builder: (context) =>
-                                            const SuccessPaymentDialog(),
-                                      );
-                                    },
-                                    label: 'Bayar',
-                                  ),
+                                BlocBuilder<CheckoutBloc, CheckoutState>(
+                                  builder: (context, state) {
+                                    List<ProductQuantity> items =
+                                        state.maybeWhen(
+                                      orElse: () => [],
+                                      loaded: (products) => products,
+                                    );
+                                    return Flexible(
+                                      child: Button.filled(
+                                        onPressed: () async {
+                                          context
+                                              .read<OrderBloc>()
+                                              .add(OrderEvent.order(
+                                                items,
+                                                0,
+                                                0,
+                                                0,
+                                                totalPriceController
+                                                    .text.toIntegerFromText,
+                                              ));
+                                          await showDialog(
+                                            context: context,
+                                            barrierDismissible: false,
+                                            builder: (context) =>
+                                                const SuccessPaymentDialog(),
+                                          );
+                                        },
+                                        label: 'Bayar',
+                                      ),
+                                    );
+                                  },
                                 ),
                               ],
                             ),

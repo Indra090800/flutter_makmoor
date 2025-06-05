@@ -1,11 +1,10 @@
 import '../../../../core/core.dart';
 import 'package:flutter/material.dart';
-import '../bloc/bloc/checkout_bloc.dart';
 import '../models/product_quantity.dart';
+import '../bloc/checkout/checkout_bloc.dart';
 import '../../../core/constants/variable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../components/components.dart';
-
 
 class OrderMenu extends StatelessWidget {
   final ProductQuantity data;
@@ -93,7 +92,7 @@ class OrderMenu extends StatelessWidget {
                   width: 30.0,
                   child: Center(
                       child: Text(
-                    data.qty.toString(),
+                    data.quantity.toString(),
                   )),
                 ),
                 GestureDetector(
@@ -121,7 +120,7 @@ class OrderMenu extends StatelessWidget {
             SizedBox(
               width: 80.0,
               child: Text(
-                (data.product.price!.toIntegerFromText * data.qty)
+                (data.product.price!.toIntegerFromText * data.quantity)
                     .currencyFormatRp,
                 textAlign: TextAlign.right,
                 style: const TextStyle(

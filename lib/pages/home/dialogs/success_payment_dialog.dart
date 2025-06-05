@@ -1,8 +1,10 @@
+import 'package:intl/intl.dart';
 import '../models/cwb_print.dart';
 import '../models/order_item.dart';
 import '../../../../core/core.dart';
+import '../bloc/order/order_bloc.dart';
 import 'package:flutter/material.dart';
-import '../bloc/bloc/checkout_bloc.dart';
+import '../bloc/checkout/checkout_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../components/components.dart';
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
@@ -40,48 +42,30 @@ class _SuccessPaymentDialogState extends State<SuccessPaymentDialog> {
             const SpaceHeight(20.0),
             const Text('METODE BAYAR'),
             const SpaceHeight(5.0),
-            const Text(
-              'Tunai',
-              style: TextStyle(
-                fontWeight: FontWeight.w700,
-              ),
+            BlocBuilder<OrderBloc, OrderState>(
+              builder: (context, state) {
+                final paymentMethod = state.maybeWhen(
+                  orElse: () => 'Cash',
+                  loaded: (model) => model.paymentMethod,
+                );
+                return Text(
+                  paymentMethod,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                  ),
+                );
+              },
             ),
             const SpaceHeight(10.0),
             const Divider(),
             const SpaceHeight(8.0),
             const Text('TOTAL TAGIHAN'),
             const SpaceHeight(5.0),
-            BlocBuilder<CheckoutBloc, CheckoutState>(
+            BlocBuilder<OrderBloc, OrderState>(
               builder: (context, state) {
-                final price = state.maybeWhen(
+                final total = state.maybeWhen(
                   orElse: () => 0,
-                  loaded: (products) => products.fold<int>(
-                      0,
-                      (previousValue, element) =>
-                          previousValue +
-                          (element.product.price!.toIntegerFromText *
-                              element.qty)),
-                );
-                final tax = price * 0.11;
-                final total = price + tax;
-                // data = state.maybeWhen(
-                //   orElse: () => [],
-                //   loaded: (products) => products,
-                // );
-                totalQty = state.maybeWhen(
-                  orElse: () => 0,
-                  loaded: (products) => products.fold(0,
-                      (previousValue, element) => previousValue + element.qty),
-                );
-                totalPrice = state.maybeWhen(
-                  orElse: () => 0,
-                  loaded: (products) => products.fold(
-                                      0,
-                                      (previousValue, element) =>
-                                          previousValue +
-                                          (element.product.price!
-                                                  .toIntegerFromText *
-                                              element.qty)),
+                  loaded: (model) => model.total,
                 );
                 return Text(
                   total.ceil().currencyFormatRp,
@@ -96,22 +80,37 @@ class _SuccessPaymentDialogState extends State<SuccessPaymentDialog> {
             const SpaceHeight(8.0),
             const Text('NOMINAL BAYAR'),
             const SpaceHeight(5.0),
-            BlocBuilder<CheckoutBloc, CheckoutState>(
+            BlocBuilder<OrderBloc, OrderState>(
               builder: (context, state) {
-                final price = state.maybeWhen(
+                final paymentAmount = state.maybeWhen(
                   orElse: () => 0,
-                  loaded: (products) => products.fold(
-                                      0,
-                                      (previousValue, element) =>
-                                          previousValue +
-                                          (element.product.price!
-                                                  .toIntegerFromText *
-                                              element.qty)),
+                  loaded: (model) => model.paymentAmount,
                 );
-                final tax = price * 0.11;
-                final total = price + tax;
                 return Text(
-                  total.ceil().currencyFormatRp,
+                  paymentAmount.ceil().currencyFormatRp,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                  ),
+                );
+              },
+            ),
+            const Divider(),
+            const SpaceHeight(8.0),
+            const Text('KEMBALIAN'),
+            const SpaceHeight(5.0),
+            BlocBuilder<OrderBloc, OrderState>(
+              builder: (context, state) {
+                final paymentAmount = state.maybeWhen(
+                  orElse: () => 0,
+                  loaded: (model) => model.paymentAmount,
+                );
+                final total = state.maybeWhen(
+                  orElse: () => 0,
+                  loaded: (model) => model.total,
+                );
+                final diff = paymentAmount - total;
+                return Text(
+                  diff.ceil().currencyFormatRp,
                   style: const TextStyle(
                     fontWeight: FontWeight.w700,
                   ),
@@ -123,9 +122,9 @@ class _SuccessPaymentDialogState extends State<SuccessPaymentDialog> {
             const SpaceHeight(8.0),
             const Text('WAKTU PEMBAYARAN'),
             const SpaceHeight(5.0),
-             Text(
-              DateTime.now().toFormattedDate(),
-              style:const TextStyle(
+            Text(
+              DateFormat('dd MMMM yyyy, HH:mm').format(DateTime.now()),
+              style: const TextStyle(
                 fontWeight: FontWeight.w700,
               ),
             ),

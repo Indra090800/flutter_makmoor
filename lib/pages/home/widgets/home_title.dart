@@ -1,7 +1,7 @@
 import '../../../../core/core.dart';
 import 'package:flutter/material.dart';
 import '../../../../components/components.dart';
-
+import '../../../data/datasource/auth_local_datasource.dart';
 
 class HomeTitle extends StatelessWidget {
   final TextEditingController controller;
@@ -15,14 +15,21 @@ class HomeTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String? token;
+    getAuth() async {
+      final authData = await AuthLocalDataSource().getAuthData();
+      token = authData.token;
+    }
+    
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Makmoor',
+             Text(
+              'Makmoor ${token}',
               style: TextStyle(
                 color: AppColors.green,
                 fontSize: 22,

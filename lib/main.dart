@@ -4,15 +4,18 @@ import 'package:flutter/material.dart';
 import 'pages/auth/login/login_bloc.dart';
 import 'pages/auth/pages/login_page.dart';
 import 'pages/auth/logout/logout_bloc.dart';
+import 'pages/home/bloc/order/order_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'pages/home/pages/main_nav_desktop.dart';
-import 'pages/home/bloc/bloc/checkout_bloc.dart';
 import 'data/datasource/auth_local_datasource.dart';
+import 'pages/home/bloc/checkout/checkout_bloc.dart';
 import 'data/datasource/auth_remote_datasource.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'data/datasource/order_remote_datasource.dart';
 import 'data/datasource/product_local_datasource.dart';
 import 'data/datasource/product_remote_datasource.dart';
+import 'pages/settings/bloc/sync_order/sync_order_bloc.dart';
 import 'pages/home/bloc/local_product/local_product_bloc.dart';
 import 'pages/settings/bloc/sync_product/sync_product_bloc.dart';
 
@@ -48,6 +51,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => CheckoutBloc(),
+        ),
+        BlocProvider(
+          create: (context) => OrderBloc(),
+        ),
+        BlocProvider(
+          create: (context) => SyncOrderBloc(OrderRemoteDatasource()),
         ),
       ],
       child: MaterialApp(
@@ -92,6 +101,7 @@ class MyApp extends StatelessWidget {
                       ),
                     );
                   }
+                  print('login: ${asyncSnapshot.data!}');
                   if (asyncSnapshot.hasData) {
                     if (asyncSnapshot.data!) {
                       return const MainNavDesktop();

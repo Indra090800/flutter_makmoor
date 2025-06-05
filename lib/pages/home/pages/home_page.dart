@@ -7,8 +7,7 @@ import '../widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import '../widgets/column_button.dart';
 import '../widgets/custom_tab_bar.dart';
-import '../bloc/bloc/checkout_bloc.dart';
-import '../models/product_category.dart';
+import '../bloc/checkout/checkout_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../components/components.dart';
 import '../bloc/local_product/local_product_bloc.dart';
@@ -634,7 +633,7 @@ class _HomePageState extends State<HomePage> {
                                           .map((e) =>
                                               e.product.price!
                                                   .toIntegerFromText *
-                                              e.qty)
+                                              e.quantity)
                                           .reduce((value, element) =>
                                               value + element);
                                     },
