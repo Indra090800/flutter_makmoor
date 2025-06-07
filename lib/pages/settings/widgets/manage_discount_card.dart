@@ -1,9 +1,9 @@
 import '../../../../core/core.dart';
 import 'package:flutter/material.dart';
-import '../models/discount_model.dart';
+import '../../../data/model/response/discount_response_model.dart';
 
 class ManageDiscountCard extends StatelessWidget {
-  final DiscountModel data;
+  final Discount data;
   final VoidCallback onEditTap;
 
   const ManageDiscountCard({
@@ -37,7 +37,7 @@ class ManageDiscountCard extends StatelessWidget {
                   color: AppColors.disabled.withOpacity(0.4),
                 ),
                 child: Text(
-                  '${data.discount}%',
+                  '${data.value!.replaceAll('.00', '')}%',
                   style: const TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.w900,
@@ -51,7 +51,7 @@ class ManageDiscountCard extends StatelessWidget {
                     text: 'Nama Promo : ',
                     children: [
                       TextSpan(
-                        text: data.code,
+                        text: data.name,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,

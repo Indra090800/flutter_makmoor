@@ -1,10 +1,11 @@
+import 'manage_tax.dart';
 import 'sync_data_page.dart';
+import 'manage_discount.dart';
 import '../../../../core/core.dart';
-import '../widgets/manage_tax.dart';
 import 'package:flutter/material.dart';
-import '../widgets/manage_discount.dart';
 import '../../../../components/components.dart';
 import '../../home/pages/manage_printer_page.dart';
+
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -109,7 +110,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   children: const [
                     ManageDiscount(),
                     ManagePrinterPage(),
-                    ManageTax(),
+                    TaxPage(),
                     SyncDataPage(),
                   ],
                 ),

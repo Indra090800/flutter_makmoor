@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/assets/assets.gen.dart';
 
+
 class ManageTaxCard extends StatelessWidget {
   final TaxModel data;
   final VoidCallback onEditTap;
@@ -78,7 +79,7 @@ class ManageTaxCard extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                  color: AppColors.green,
+                  color: AppColors.primary,
                 ),
                 child: Assets.icons.edit.svg(),
               ),

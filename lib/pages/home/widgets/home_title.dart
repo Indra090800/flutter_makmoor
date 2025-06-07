@@ -15,21 +15,14 @@ class HomeTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? token;
-    getAuth() async {
-      final authData = await AuthLocalDataSource().getAuthData();
-      token = authData.token;
-    }
-    
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             Text(
-              'Makmoor ${token}',
+            const Text(
+              'Makmoor',
               style: TextStyle(
                 color: AppColors.green,
                 fontSize: 22,

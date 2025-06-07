@@ -1,34 +1,23 @@
-import 'add_data.dart';
-import 'settings_title.dart';
-import 'manage_tax_card.dart';
+import '../models/tax_model.dart';
+import '../widgets/add_data.dart';
 import 'package:flutter/material.dart';
+import '../widgets/settings_title.dart';
+import '../dialogs/form_tax_dialog.dart';
+import '../widgets/manage_tax_card.dart';
 import '../../home/widgets/custom_tab_bar.dart';
-import 'package:makmoor/pages/settings/models/tax_model.dart';
-import 'package:makmoor/pages/settings/dialogs/form_tax_dialog.dart';
 
 
-
-
-class ManageTax extends StatefulWidget {
-  const ManageTax({super.key});
+class TaxPage extends StatefulWidget {
+  const TaxPage({super.key});
 
   @override
-  State<ManageTax> createState() => _ManageTaxState();
+  State<TaxPage> createState() => _TaxPageState();
 }
 
-class _ManageTaxState extends State<ManageTax> {
+class _TaxPageState extends State<TaxPage> {
   final List<TaxModel> items = [
-    TaxModel(
-      name: 'Pajak 11%',
-      value: 11,
-      type: TaxType.pajak,
-    ),
-    TaxModel(
-      name: 'Layanan 5%',
-      value: 5,
-      type: TaxType.layanan,
-    ),
-   
+    TaxModel(name: 'Biaya Layanan', type: TaxType.layanan, value: 5),
+    TaxModel(name: 'Pajak', type: TaxType.pajak, value: 11),
   ];
 
   void onEditTap(TaxModel item) {

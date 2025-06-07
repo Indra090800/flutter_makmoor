@@ -1,8 +1,24 @@
 import '../../../../core/core.dart';
 import 'package:flutter/material.dart';
+import '../bloc/checkout/checkout_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../settings/bloc/discount/discount_bloc.dart';
 
-class DiscountDialog extends StatelessWidget {
+class DiscountDialog extends StatefulWidget {
   const DiscountDialog({super.key});
+
+  @override
+  State<DiscountDialog> createState() => _DiscountDialogState();
+}
+
+class _DiscountDialogState extends State<DiscountDialog> {
+  @override
+  void initState() {
+    context.read<DiscountBloc>().add(const DiscountEvent.getDiscounts());
+    super.initState();
+  }
+
+  int discountIdSelected = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +37,9 @@ class DiscountDialog extends StatelessWidget {
           Align(
             alignment: Alignment.centerRight,
             child: IconButton(
-              onPressed: () => context.pop(),
+              onPressed: () {
+                context.pop();
+              },
               icon: const Icon(
                 Icons.cancel,
                 color: AppColors.green,
@@ -31,37 +49,48 @@ class DiscountDialog extends StatelessWidget {
           ),
         ],
       ),
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ListTile(
-            title: const Text('Nama Diskon: BUKAPUASA'),
-            subtitle: const Text('Potongan harga (20%)'),
-            contentPadding: EdgeInsets.zero,
-            textColor: AppColors.green,
-            trailing: Checkbox(
-              value: true,
-              onChanged: (value) {},
+      content: BlocBuilder<DiscountBloc, DiscountState>(
+        builder: (context, state) {
+          return state.maybeWhen(
+            orElse: () => const SizedBox.shrink(),
+            loading: () => const Center(
+              child: CircularProgressIndicator(),
             ),
-            onTap: () {
-              context.pop();
+            loaded: (discounts) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: discounts
+                    .map(
+                      (discount) => ListTile(
+                        title: Text('Nama Diskon: ${discount.name}'),
+                        subtitle: Text(
+                            'Potongan harga (${discount.value!.replaceAll('.00', '')}%)'),
+                        contentPadding: EdgeInsets.zero,
+                        textColor: AppColors.primary,
+                        trailing: Checkbox(
+                          value: discount.id == discountIdSelected,
+                          onChanged: (value) {
+                            setState(() {
+                              discountIdSelected = discount.id!;
+                              context.read<CheckoutBloc>().add(
+                                    CheckoutEvent.addDiscount(
+                                      discount,
+                                    ),
+                                  );
+                            });
+                          },
+                        ),
+                        onTap: () {
+                          // context.pop();
+                        },
+                      ),
+                    )
+                    .toList(),
+              );
             },
-          ),
-          ListTile(
-            title: const Text('Nama Diskon: WELCOMECWB'),
-            subtitle: const Text('Potongan harga (30%)'),
-            contentPadding: EdgeInsets.zero,
-            textColor: AppColors.green,
-            trailing: Checkbox(
-              value: false,
-              onChanged: (value) {},
-            ),
-            onTap: () {
-              context.pop();
-            },
-          ),
-        ],
+          );
+        },
       ),
     );
   }
