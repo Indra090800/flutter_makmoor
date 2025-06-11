@@ -29,8 +29,8 @@ class DiscountRemoteDatasource {
       'Accept': 'application/json',
     }, body: {
       'name': name,
-      'description': description,
-      'value': value,
+      'description': description.isEmpty ? name : description,
+      'value': value.toString(),
       'type': 'percentage',
     });
 
@@ -38,6 +38,30 @@ class DiscountRemoteDatasource {
       return Right(DiscountResponseModel.fromJson(response.body));
     } else {
       return const Left('Failed to get products');
+    }
+  }
+
+   Future<Either<String, bool>> addDiscount(
+    String name,
+    String description,
+    int value,
+  ) async {
+    final url = Uri.parse('${Variable.baseUrl}/api/api-discounts');
+    final authData = await AuthLocalDataSource().getAuthData();
+    final response = await http.post(url, headers: {
+      'Authorization': 'Bearer ${authData.token}',
+      'Accept': 'application/json',
+    }, body: {
+      'name': name,
+      'description': description,
+      'value': value.toString(),
+      'type': 'percentage',
+    });
+
+    if (response.statusCode == 201) {
+      return const Right(true);
+    } else {
+      return const Left('Failed to add discount');
     }
   }
 }

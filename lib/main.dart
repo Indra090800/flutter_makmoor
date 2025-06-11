@@ -1,28 +1,44 @@
 import 'dart:io';
 import 'core/constants/colors.dart';
 import 'package:flutter/material.dart';
-import 'pages/auth/login/login_bloc.dart';
-import 'pages/auth/pages/login_page.dart';
-import 'pages/auth/logout/logout_bloc.dart';
-import 'pages/home/bloc/order/order_bloc.dart';
-import 'pages/settings/bloc/tax/tax_bloc.dart';
+import 'presentation/auth/login_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'pages/home/pages/main_nav_desktop.dart';
-import 'data/datasource/tax_remote_datasource.dart';
 import 'data/datasource/auth_local_datasource.dart';
-import 'pages/home/bloc/checkout/checkout_bloc.dart';
-import 'data/datasource/auth_remote_datasource.dart';
+import 'presentation/home/bloc/qris/qris_bloc.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'data/datasource/auth_remote_datasource.dart';
+import 'presentation/home/pages/dashboard_page.dart';
 import 'data/datasource/order_remote_datasource.dart';
+import 'presentation/auth/bloc/login/login_bloc.dart';
 import 'data/datasource/product_local_datasource.dart';
 import 'data/datasource/product_remote_datasource.dart';
+import 'presentation/auth/bloc/logout/logout_bloc.dart';
+import 'data/datasource/category_remote_datasource.dart';
+import 'data/datasource/midtrans_remote_datasource.dart';
 import 'data/datasource/discount_remote_datasource.dart';
-import 'pages/settings/bloc/discount/discount_bloc.dart';
-import 'pages/settings/bloc/sync_order/sync_order_bloc.dart';
-import 'pages/home/bloc/local_product/local_product_bloc.dart';
-import 'pages/settings/bloc/add_discount/add_discount_bloc.dart';
-import 'pages/settings/bloc/sync_product/sync_product_bloc.dart';
+import 'data/datasource/order_item_remote_datasource.dart';
+import 'presentation/home/bloc/checkout/checkout_bloc.dart';
+import 'presentation/report/blocs/summary/summary_bloc.dart';
+import 'presentation/setting/bloc/discount/discount_bloc.dart';
+import 'presentation/sales/blocs/day_sales/day_sales_bloc.dart';
+import 'presentation/table/blocs/get_table/get_table_bloc.dart';
+import 'presentation/sales/blocs/bloc/last_order_table_bloc.dart';
+import 'presentation/setting/bloc/sync_order/sync_order_bloc.dart';
+import 'presentation/home/bloc/status_table/status_table_bloc.dart';
+import 'presentation/home/bloc/order/order_bloc.dart' show OrderBloc;
+import 'presentation/setting/bloc/add_product/add_product_bloc.dart';
+import 'presentation/home/bloc/local_product/local_product_bloc.dart';
+import 'presentation/setting/bloc/add_discount/add_discount_bloc.dart';
+import 'presentation/setting/bloc/get_products/get_products_bloc.dart';
+import 'presentation/setting/bloc/sync_product/sync_product_bloc.dart';
+import 'presentation/home/bloc/online_checker/online_checker_bloc.dart';
+import 'presentation/report/blocs/product_sales/product_sales_bloc.dart';
+import 'presentation/table/blocs/generate_table/generate_table_bloc.dart';
+import 'presentation/setting/bloc/get_categories/get_categories_bloc.dart';
+import 'presentation/home/bloc/get_table_status/get_table_status_bloc.dart';
+import 'presentation/report/blocs/item_sales_report/item_sales_report_bloc.dart';
+import 'presentation/report/blocs/transaction_report/transaction_report_bloc.dart';
 
 
 
@@ -52,13 +68,14 @@ class MyApp extends StatelessWidget {
           create: (context) => SyncProductBloc(ProductRemoteDatasource()),
         ),
         BlocProvider(
-          create: (context) => LocalProductBloc(ProductLocalDatasource.instance),
+          create: (context) =>
+              LocalProductBloc(ProductLocalDatasource.instance),
         ),
         BlocProvider(
           create: (context) => CheckoutBloc(),
         ),
         BlocProvider(
-          create: (context) => OrderBloc(),
+          create: (context) => OrderBloc(OrderRemoteDatasource()),
         ),
         BlocProvider(
           create: (context) => SyncOrderBloc(OrderRemoteDatasource()),
@@ -67,10 +84,53 @@ class MyApp extends StatelessWidget {
           create: (context) => DiscountBloc(DiscountRemoteDatasource()),
         ),
         BlocProvider(
-          create: (context) => TaxBloc(TaxRemoteDatasource()),
+          create: (context) => AddDiscountBloc(DiscountRemoteDatasource()),
         ),
         BlocProvider(
-          create: (context) => AddDiscountBloc(DiscountRemoteDatasource()),
+          create: (context) => TransactionReportBloc(OrderRemoteDatasource()),
+        ),
+        BlocProvider(
+          create: (context) => GenerateTableBloc(),
+        ),
+        BlocProvider(
+          create: (context) => GetTableBloc(),
+        ),
+        BlocProvider(
+          create: (context) => StatusTableBloc(ProductLocalDatasource.instance),
+        ),
+        BlocProvider(
+          create: (context) =>
+              LastOrderTableBloc(ProductLocalDatasource.instance),
+        ),
+        BlocProvider(
+          create: (context) => GetTableStatusBloc(),
+        ),
+        BlocProvider(
+          create: (context) => AddProductBloc(ProductRemoteDatasource()),
+        ),
+        BlocProvider(
+          create: (context) => GetProductsBloc(ProductRemoteDatasource()),
+        ),
+        BlocProvider(
+          create: (context) => GetCategoriesBloc(CategoryRemoteDatasource()),
+        ),
+        BlocProvider(
+          create: (context) => SummaryBloc(OrderRemoteDatasource()),
+        ),
+        BlocProvider(
+          create: (context) => ProductSalesBloc(OrderItemRemoteDatasource()),
+        ),
+        BlocProvider(
+          create: (context) => ItemSalesReportBloc(OrderItemRemoteDatasource()),
+        ),
+        BlocProvider(
+          create: (context) => DaySalesBloc(ProductLocalDatasource.instance),
+        ),
+        BlocProvider(
+          create: (context) => QrisBloc(MidtransRemoteDatasource()),
+        ),
+        BlocProvider(
+          create: (context) => OnlineCheckerBloc(),
         ),
       ],
       child: MaterialApp(
@@ -105,7 +165,7 @@ class MyApp extends StatelessWidget {
                 ),
               )
             : FutureBuilder<bool>(
-                future: AuthLocalDataSource().isAuthDataExist(),
+                future: AuthLocalDataSource().isAuthDataExists(),
                 builder: (context, asyncSnapshot) {
                   if (asyncSnapshot.connectionState ==
                       ConnectionState.waiting) {
@@ -117,7 +177,7 @@ class MyApp extends StatelessWidget {
                   }
                   if (asyncSnapshot.hasData) {
                     if (asyncSnapshot.data!) {
-                      return const MainNavDesktop();
+                      return const DashboardPage();
                     } else {
                       return const LoginPage();
                     }
