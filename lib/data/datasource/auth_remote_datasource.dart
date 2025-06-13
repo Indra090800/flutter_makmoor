@@ -35,7 +35,7 @@ class AuthRemoteDatasource {
     );
 
     if (response.statusCode == 200) {
-      return Right(true);
+      return const Right(true);
     } else {
       return const Left('Failed to logout');
     }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../core/constants/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../core/constants/colors.dart';
 
 
 
@@ -10,6 +10,7 @@ class NavItem extends StatelessWidget {
   final bool isActive;
   final VoidCallback onTap;
   final Color color;
+  final String tooltip; // Tambahan parameter tooltip
 
   const NavItem({
     super.key,
@@ -17,6 +18,7 @@ class NavItem extends StatelessWidget {
     required this.isActive,
     required this.onTap,
     this.color = AppColors.white,
+    required this.tooltip, // Wajib diisi
   });
 
   @override
@@ -37,14 +39,17 @@ class NavItem extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(
-                    width: 25.0,
-                    height: 25.0,
-                    child: SvgPicture.asset(
-                      iconPath,
-                      colorFilter: ColorFilter.mode(
-                        color,
-                        BlendMode.srcIn,
+                  Tooltip(
+                    message: tooltip,
+                    child: SizedBox(
+                      width: 25.0,
+                      height: 25.0,
+                      child: SvgPicture.asset(
+                        iconPath,
+                        colorFilter: ColorFilter.mode(
+                          color,
+                          BlendMode.srcIn,
+                        ),
                       ),
                     ),
                   ),

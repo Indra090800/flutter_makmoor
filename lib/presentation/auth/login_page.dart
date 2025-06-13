@@ -38,27 +38,26 @@ class _LoginPageState extends State<LoginPage> {
           const SpaceHeight(80.0),
           Padding(
               padding: const EdgeInsets.symmetric(horizontal: 130.0),
-              child: SvgPicture.asset(
-                Assets.icons.homeResto.path,
+              child: Image.asset(
+                Assets.images.makmoor2.path,
                 width: 100,
                 height: 100,
-                color: AppColors.green,
               )),
           const SpaceHeight(24.0),
-          const Center(
-            child: Text(
-              'Resto Code With Bahri',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: Colors.black,
-              ),
-            ),
-          ),
+          // const Center(
+          //   child: Text(
+          //     'MAKMOOR APPS',
+          //     style: TextStyle(
+          //       fontSize: 16,
+          //       fontWeight: FontWeight.w700,
+          //       color: Colors.black,
+          //     ),
+          //   ),
+          // ),
           const SpaceHeight(8.0),
           const Center(
             child: Text(
-              'Akses Login Kasir Resto',
+              'Akses Login Kasir ',
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,

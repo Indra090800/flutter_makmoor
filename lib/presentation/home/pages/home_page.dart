@@ -19,6 +19,7 @@ import '../../../core/extensions/string_ext.dart';
 import '../bloc/local_product/local_product_bloc.dart';
 import '../../../data/model/response/table_model.dart';
 import '../../../core/extensions/build_context_ext.dart';
+import '../../../data/datasource/auth_local_datasource.dart';
 
 class HomePage extends StatefulWidget {
   final bool isTable;
@@ -41,6 +42,7 @@ class _HomePageState extends State<HomePage> {
     context
         .read<LocalProductBloc>()
         .add(const LocalProductEvent.getLocalProduct());
+    getKasir();
     super.initState();
   }
 
@@ -48,6 +50,12 @@ class _HomePageState extends State<HomePage> {
     searchController.clear();
 
     setState(() {});
+  }
+
+  String? kasir;
+  getKasir() async {
+    final authData = await AuthLocalDataSource().getAuthData();
+    kasir = authData.user!.name;
   }
 
   @override
@@ -304,29 +312,24 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Orders',
-                            style: TextStyle(
-                              color: AppColors.green,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SpaceHeight(8.0),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Button.filled(
-                                width: 120.0,
-                                height: 40,
-                                onPressed: () {},
-                                label: 'Dine In',
+                              const Text(
+                                'Orders',
+                                style: TextStyle(
+                                  color: AppColors.green,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
-                              const SpaceWidth(8.0),
-                              Button.outlined(
-                                width: 100.0,
-                                height: 40,
-                                onPressed: () {},
-                                label: 'To Go',
+                              Text(
+                                'Kasir : $kasir',
+                                style: const TextStyle(
+                                  color: AppColors.green,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ],
                           ),
@@ -637,7 +640,7 @@ class _IsEmpty extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SpaceHeight(40),
+        const SpaceHeight(40),
         Assets.icons.noProduct.svg(),
         const SizedBox(height: 40.0),
         const Text(

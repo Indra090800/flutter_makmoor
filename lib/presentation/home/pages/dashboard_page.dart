@@ -88,26 +88,31 @@ class _DashboardPageState extends State<DashboardPage> {
                       NavItem(
                         iconPath: Assets.icons.homeResto.path,
                         isActive: _selectedIndex == 0,
+                        tooltip: 'POS',
                         onTap: () => _onItemTapped(0),
                       ),
                       NavItem(
                         iconPath: Assets.icons.kelolaProduk.path,
                         isActive: _selectedIndex == 1,
+                        tooltip: 'Table Management',
                         onTap: () => _onItemTapped(1),
                       ),
                       NavItem(
                         iconPath: Assets.icons.dashboard.path,
                         isActive: _selectedIndex == 2,
+                        tooltip: 'Report Page',
                         onTap: () => _onItemTapped(2),
                       ),
                       NavItem(
                         iconPath: Assets.icons.dashboard.path,
                         isActive: _selectedIndex == 3,
+                        tooltip: 'Transaction',
                         onTap: () => _onItemTapped(3),
                       ),
                       NavItem(
                         iconPath: Assets.icons.setting.path,
                         isActive: _selectedIndex == 4,
+                        tooltip: 'Settings Page',
                         onTap: () => _onItemTapped(4),
                       ),
                       //container flag online/offline
@@ -181,6 +186,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         child: NavItem(
                           iconPath: Assets.icons.logout.path,
                           isActive: false,
+                          tooltip: 'Logout',
                           onTap: () {
                             context
                                 .read<LogoutBloc>()
@@ -192,6 +198,11 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                 ),
               ),
+            ),
+            Container(
+              width: 20,
+              height: double.infinity,
+              color: Colors.yellow,
             ),
             Expanded(
               flex: 10,

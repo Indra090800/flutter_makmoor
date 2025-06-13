@@ -1,3 +1,8 @@
+import 'package:flutter/widgets.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart' as _svg;
+import 'package:vector_graphics/vector_graphics.dart' as _vg;
+
 /// GENERATED CODE - DO NOT MODIFY BY HAND
 /// *****************************************************
 ///  FlutterGen
@@ -6,11 +11,6 @@
 // coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal,deprecated_member_use
-
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart' as _svg;
-import 'package:vector_graphics/vector_graphics.dart' as _vg;
 
 class $AssetsIconsGen {
   const $AssetsIconsGen();
@@ -189,6 +189,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/logo.png
   AssetGenImage get logo => const AssetGenImage('assets/images/logo.png');
 
+  AssetGenImage get makmoor => const AssetGenImage('assets/images/makmoor.jpg');
+  AssetGenImage get makmoor2 =>
+      const AssetGenImage('assets/images/makmoor.png');
+
   /// File path: assets/images/manage_printer.png
   AssetGenImage get managePrinter =>
       const AssetGenImage('assets/images/manage_printer.png');
@@ -266,6 +270,8 @@ class $AssetsImagesGen {
         drink6,
         drink7,
         logo,
+        makmoor,
+        makmoor2,
         managePrinter,
         manageProduct,
         manageQr,

@@ -28,6 +28,13 @@ class OrderMenu extends StatelessWidget {
                         ? data.product.image!
                         : '${Variable.baseUrl}/${data.product.image}',
                     width: 50.0,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Icon(
+                        Icons.broken_image,
+                        size: 50,
+                        color: Colors.grey,
+                      );
+                    },
                     height: 50.0,
                     fit: BoxFit.cover,
                   ),

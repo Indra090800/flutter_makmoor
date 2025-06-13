@@ -71,7 +71,7 @@ class _ProductSalesChartWidgetsState extends State<ProductSalesChartWidgets> {
     return Card(
       color: const Color.fromARGB(255, 255, 255, 255),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
         child: Column(
           children: [
             const SpaceHeight(24.0),
@@ -91,7 +91,7 @@ class _ProductSalesChartWidgetsState extends State<ProductSalesChartWidgets> {
             const SpaceHeight(16.0),
             PieChart(
               dataMap: dataMap2,
-              animationDuration: Duration(milliseconds: 800),
+              animationDuration: const Duration(milliseconds: 800),
               chartLegendSpacing: 32,
               chartRadius: MediaQuery.of(context).size.width / 3.2,
               colorList: colorList,
@@ -99,7 +99,7 @@ class _ProductSalesChartWidgetsState extends State<ProductSalesChartWidgets> {
               chartType: ChartType.disc,
               ringStrokeWidth: 32,
               // centerText: "HYBRID",
-              legendOptions: LegendOptions(
+              legendOptions: const LegendOptions(
                 showLegendsInRow: false,
                 legendPosition: LegendPosition.right,
                 showLegends: true,
@@ -108,7 +108,7 @@ class _ProductSalesChartWidgetsState extends State<ProductSalesChartWidgets> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              chartValuesOptions: ChartValuesOptions(
+              chartValuesOptions: const ChartValuesOptions(
                 showChartValueBackground: true,
                 showChartValues: true,
                 showChartValuesInPercentage: false,
