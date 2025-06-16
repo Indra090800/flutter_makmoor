@@ -7,17 +7,14 @@ import '../model/request/product_request_model.dart';
 import '../model/response/product_response_model.dart';
 import '../model/response/add_product_response_model.dart';
 
-
 class ProductRemoteDatasource {
   Future<Either<String, ProductResponseModel>> getProducts() async {
     final authData = await AuthLocalDataSource().getAuthData();
-    final url = Uri.parse('${Variable.baseUrl}/api/api-products');
+    final url = Uri.parse('${Variable.baseUrl}/api/products');
     final response = await http.get(url, headers: {
       'Authorization': 'Bearer ${authData.token}',
       'Accept': 'application/json',
     });
-
-    print(response.body);
 
     if (response.statusCode == 200) {
       return Right(ProductResponseModel.fromJson(response.body));

@@ -20,9 +20,6 @@ import '../bloc/local_product/local_product_bloc.dart';
 import '../../../data/model/response/table_model.dart';
 import '../../../core/extensions/build_context_ext.dart';
 import '../../../data/datasource/auth_local_datasource.dart';
-import '../../../data/model/response/product_response_model.dart';
-import '../../../data/model/response/category_response_model.dart';
-import '../../setting/bloc/get_categories/get_categories_bloc.dart';
 
 class HomePage extends StatefulWidget {
   final bool isTable;
@@ -39,43 +36,22 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final searchController = TextEditingController();
-  List<Product> allProducts = [];
-  List<Product> filteredProducts = [];
-  int currentCategoryId = 0;
 
   @override
   void initState() {
-    super.initState();
     getKasir();
     context
         .read<LocalProductBloc>()
         .add(const LocalProductEvent.getLocalProduct());
-    context.read<GetCategoriesBloc>().add(const GetCategoriesEvent.fetch());
+    
+    super.initState();
   }
 
-  void onSearchChanged(String value) {
-    setState(() {
-      filteredProducts = allProducts
-          .where((product) =>
-              product.category?.id == currentCategoryId &&
-              product.name!.toLowerCase().contains(value.toLowerCase()))
-          .toList();
-    });
+  void onCategoryTap(int index) {
+    searchController.clear();
+
+    setState(() {});
   }
-
-  void onCategoryTap(int id) {
-  searchController.clear();
-  setState(() {
-    currentCategoryId = id;
-    filteredProducts = allProducts
-        .where((product) =>
-            (id == 0 || product.category?.id == id) &&
-            (searchController.text.isEmpty ||
-                product.name!.toLowerCase().contains(searchController.text.toLowerCase())))
-        .toList();
-  });
-}
-
 
   String? kasir;
   getKasir() async {
@@ -102,109 +78,223 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         HomeTitle(
                           controller: searchController,
-                          onChanged: onSearchChanged,
+                          onChanged: (value) {},
                         ),
                         const SizedBox(height: 24),
-                        BlocBuilder<GetCategoriesBloc, GetCategoriesState>(
-                          builder: (context, categoryState) {
-                            return categoryState.maybeWhen(
-                              orElse: () => SizedBox(),
-                              success: (categories) {
-                                final updatedCategories = [
-                                  CategoryModel(
-                                      id: 0,
-                                      name:
-                                          'Semua'), // Tambahkan kategori 'Semua'
-                                  ...categories
-                                ];
-
-                                if (currentCategoryId == 0 &&
-                                    updatedCategories.isNotEmpty) {
-                                  currentCategoryId =
-                                      updatedCategories.first.id!;
-                                }
-
-                                return CustomTabBar(
-                                  tabTitles: updatedCategories
-                                      .map((e) => e.name!)
-                                      .toList(),
-                                  initialTabIndex: 0,
-                                  onTap: (index) => onCategoryTap(
-                                      updatedCategories[index].id!),
-                                  tabViews: updatedCategories.map((category) {
-                                    return SizedBox(
-                                      child: BlocBuilder<LocalProductBloc,
-                                          LocalProductState>(
-                                        builder: (context, productState) {
-                                          return productState.maybeWhen(
-                                            orElse: () =>
-                                                const Center(child: _IsEmpty()),
-                                            loading: () => const Center(
-                                                child:
-                                                    CircularProgressIndicator()),
-                                            loaded: (products) {
-                                              allProducts = products;
-
-                                              // Filter jika bukan kategori semua
-                                              final showingProducts = category.id == 0
-                                                  ? (searchController.text.isEmpty
-                                                      ? products
-                                                      : products
-                                                          .where((product) => product
-                                                              .name!
-                                                              .toLowerCase()
-                                                              .contains(searchController
-                                                                  .text
-                                                                  .toLowerCase()))
-                                                          .toList())
-                                                  : products
-                                                      .where((p) =>
-                                                          p.category?.id ==
-                                                              category.id &&
-                                                          (searchController.text
-                                                                  .isEmpty ||
-                                                              p.name!
-                                                                  .toLowerCase()
-                                                                  .contains(
-                                                                      searchController.text.toLowerCase())))
-                                                      .toList();
-
-                                              if (showingProducts.isEmpty) {
-                                                return const Center(
-                                                    child: Text('No Items'));
-                                              }
-
-                                              return GridView.builder(
-                                                shrinkWrap: true,
-                                                itemCount:
-                                                    showingProducts.length,
-                                                physics:
-                                                    const NeverScrollableScrollPhysics(),
-                                                gridDelegate:
-                                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                                  childAspectRatio: 0.85,
-                                                  crossAxisCount: 3,
-                                                  crossAxisSpacing: 30.0,
-                                                  mainAxisSpacing: 30.0,
-                                                ),
-                                                itemBuilder: (context, index) {
-                                                  return ProductCard(
-                                                    data:
-                                                        showingProducts[index],
-                                                    onCartButton: () {},
-                                                  );
-                                                },
+                        CustomTabBar(
+                          tabTitles: const [
+                            'Semua',
+                            'Makanan',
+                            'Minuman',
+                            'Snack'
+                          ],
+                          initialTabIndex: 0,
+                          tabViews: [
+                            SizedBox(
+                              child: BlocBuilder<LocalProductBloc,
+                                  LocalProductState>(
+                                builder: (context, state) {
+                                  return state.maybeWhen(orElse: () {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }, loading: () {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }, loaded: (products) {
+                                    if (products.isEmpty) {
+                                      return const Center(
+                                        child: Text('No Items'),
+                                      );
+                                    }
+                                    return GridView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: products.length,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      gridDelegate:
+                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                        childAspectRatio: 0.85,
+                                        crossAxisCount: 3,
+                                        crossAxisSpacing: 30.0,
+                                        mainAxisSpacing: 30.0,
+                                      ),
+                                      itemBuilder: (context, index) =>
+                                          ProductCard(
+                                        data: products[index],
+                                        onCartButton: () {},
+                                      ),
+                                    );
+                                  });
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              child: BlocBuilder<LocalProductBloc,
+                                  LocalProductState>(
+                                builder: (context, state) {
+                                  return state.maybeWhen(orElse: () {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }, loading: () {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }, loaded: (products) {
+                                    if (products.isEmpty) {
+                                      return const Center(
+                                        child: Text('No Items'),
+                                      );
+                                    }
+                                    return (products
+                                            .where((element) =>
+                                                element.category!.id! == 1)
+                                            .toList()
+                                            .isEmpty)
+                                        ? const _IsEmpty()
+                                        : GridView.builder(
+                                            shrinkWrap: true,
+                                            itemCount: products
+                                                .where((element) =>
+                                                    element.category!.id! == 1)
+                                                .toList()
+                                                .length,
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            gridDelegate:
+                                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                              childAspectRatio: 0.85,
+                                              crossAxisCount: 3,
+                                              crossAxisSpacing: 30.0,
+                                              mainAxisSpacing: 30.0,
+                                            ),
+                                            itemBuilder: (context, index) =>
+                                                ProductCard(
+                                              data: products
+                                                  .where((element) =>
+                                                      element.category!.id! ==
+                                                      1)
+                                                  .toList()[index],
+                                              onCartButton: () {},
+                                            ),
+                                          );
+                                  });
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              child: BlocBuilder<LocalProductBloc,
+                                  LocalProductState>(
+                                builder: (context, state) {
+                                  return state.maybeWhen(orElse: () {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }, loading: () {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }, loaded: (products) {
+                                    if (products.isEmpty) {
+                                      return const Center(
+                                        child: Text('No Items'),
+                                      );
+                                    }
+                                    return (products
+                                            .where((element) =>
+                                                element.category!.id! == 2)
+                                            .toList()
+                                            .isEmpty)
+                                        ? const _IsEmpty()
+                                        : GridView.builder(
+                                            shrinkWrap: true,
+                                            itemCount: products
+                                                .where((element) =>
+                                                    element.category!.id! == 2)
+                                                .toList()
+                                                .length,
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            gridDelegate:
+                                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                              childAspectRatio: 0.85,
+                                              crossAxisCount: 3,
+                                              crossAxisSpacing: 30.0,
+                                              mainAxisSpacing: 30.0,
+                                            ),
+                                            itemBuilder: (context, index) {
+                                              return ProductCard(
+                                                data: products
+                                                    .where((element) =>
+                                                        element.category!.id! ==
+                                                        2)
+                                                    .toList()[index],
+                                                onCartButton: () {},
                                               );
                                             },
                                           );
-                                        },
-                                      ),
+                                  });
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              child: BlocBuilder<LocalProductBloc,
+                                  LocalProductState>(
+                                builder: (context, state) {
+                                  return state.maybeWhen(orElse: () {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
                                     );
-                                  }).toList(),
-                                );
-                              },
-                            );
-                          },
+                                  }, loading: () {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }, loaded: (products) {
+                                    if (products.isEmpty) {
+                                      return const Center(
+                                        child: Text('No Items'),
+                                      );
+                                    }
+                                    return (products
+                                            .where((element) =>
+                                                element.category!.id! == 3)
+                                            .toList()
+                                            .isEmpty)
+                                        ? const _IsEmpty()
+                                        : GridView.builder(
+                                            shrinkWrap: true,
+                                            itemCount: products
+                                                .where((element) =>
+                                                    element.category!.id! == 3)
+                                                .toList()
+                                                .length,
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            gridDelegate:
+                                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                              childAspectRatio: 0.85,
+                                              crossAxisCount: 3,
+                                              crossAxisSpacing: 30.0,
+                                              mainAxisSpacing: 30.0,
+                                            ),
+                                            itemBuilder: (context, index) {
+                                              return ProductCard(
+                                                data: products
+                                                    .where((element) =>
+                                                        element.category!.id! ==
+                                                        3)
+                                                    .toList()[index],
+                                                onCartButton: () {},
+                                              );
+                                            },
+                                          );
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),

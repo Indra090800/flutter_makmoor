@@ -5,12 +5,14 @@ class CustomTabBar extends StatefulWidget {
   final List<String> tabTitles;
   final int initialTabIndex;
   final List<Widget> tabViews;
+  final ValueChanged<int>? onTap; // ✅ Tambahkan ini
 
   const CustomTabBar({
     super.key,
     required this.tabTitles,
     required this.initialTabIndex,
     required this.tabViews,
+    this.onTap, // ✅ Tambahkan ini
   });
 
   @override
@@ -39,6 +41,7 @@ class _CustomTabBarState extends State<CustomTabBar> {
                 setState(() {
                   _selectedIndex = index;
                 });
+                widget.onTap?.call(index); // ✅ Panggil jika tidak null
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 14),
