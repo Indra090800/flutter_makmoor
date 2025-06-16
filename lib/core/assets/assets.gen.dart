@@ -1,8 +1,3 @@
-import 'package:flutter/widgets.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart' as _svg;
-import 'package:vector_graphics/vector_graphics.dart' as _vg;
-
 /// GENERATED CODE - DO NOT MODIFY BY HAND
 /// *****************************************************
 ///  FlutterGen
@@ -11,6 +6,11 @@ import 'package:vector_graphics/vector_graphics.dart' as _vg;
 // coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal,deprecated_member_use
+
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart' as _svg;
+import 'package:vector_graphics/vector_graphics.dart' as _vg;
 
 class $AssetsIconsGen {
   const $AssetsIconsGen();
@@ -125,41 +125,41 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
-        allCategories,
-        calendar,
-        cash,
-        dashboard,
-        debit,
-        delete,
-        discount,
-        diskon,
-        done,
-        drink,
-        edit,
-        food,
-        history,
-        homeResto,
-        home,
-        image,
-        kelolaDiskon,
-        kelolaPajak,
-        kelolaPrinter,
-        kelolaProduk,
-        layanan,
-        logout,
-        noProduct,
-        ongkir,
-        orders,
-        pajak,
-        payments,
-        print,
-        qrCode,
-        report,
-        setting,
-        shoppingBasket,
-        snack,
-        success
-      ];
+    allCategories,
+    calendar,
+    cash,
+    dashboard,
+    debit,
+    delete,
+    discount,
+    diskon,
+    done,
+    drink,
+    edit,
+    food,
+    history,
+    homeResto,
+    home,
+    image,
+    kelolaDiskon,
+    kelolaPajak,
+    kelolaPrinter,
+    kelolaProduk,
+    layanan,
+    logout,
+    noProduct,
+    ongkir,
+    orders,
+    pajak,
+    payments,
+    print,
+    qrCode,
+    report,
+    setting,
+    shoppingBasket,
+    snack,
+    success,
+  ];
 }
 
 class $AssetsImagesGen {
@@ -189,9 +189,17 @@ class $AssetsImagesGen {
   /// File path: assets/images/logo.png
   AssetGenImage get logo => const AssetGenImage('assets/images/logo.png');
 
-  AssetGenImage get makmoor => const AssetGenImage('assets/images/makmoor.jpg');
-  AssetGenImage get makmoor2 =>
+  /// File path: assets/images/makmoor.jpg
+  AssetGenImage get makmoorJpg =>
+      const AssetGenImage('assets/images/makmoor.jpg');
+
+  /// File path: assets/images/makmoor.png
+  AssetGenImage get makmoorPng =>
       const AssetGenImage('assets/images/makmoor.png');
+
+  /// File path: assets/images/makmoor2.jpg
+  AssetGenImage get makmoor2 =>
+      const AssetGenImage('assets/images/makmoor2.jpg');
 
   /// File path: assets/images/manage_printer.png
   AssetGenImage get managePrinter =>
@@ -262,63 +270,49 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
-        drink1,
-        drink2,
-        drink3,
-        drink4,
-        drink5,
-        drink6,
-        drink7,
-        logo,
-        makmoor,
-        makmoor2,
-        managePrinter,
-        manageProduct,
-        manageQr,
-        menu1,
-        menu10,
-        menu11,
-        menu12,
-        menu13,
-        menu14,
-        menu2,
-        menu3,
-        menu4,
-        menu5,
-        menu6,
-        menu7,
-        menu8,
-        product1,
-        product2,
-        product3,
-        product4
-      ];
-}
-
-class $AssetsLogoGen {
-  const $AssetsLogoGen();
-
-  /// File path: assets/logo/mylogo.png
-  AssetGenImage get mylogo => const AssetGenImage('assets/logo/mylogo.png');
-
-  /// List of all assets
-  List<AssetGenImage> get values => [mylogo];
+    drink1,
+    drink2,
+    drink3,
+    drink4,
+    drink5,
+    drink6,
+    drink7,
+    logo,
+    makmoorJpg,
+    makmoorPng,
+    makmoor2,
+    managePrinter,
+    manageProduct,
+    manageQr,
+    menu1,
+    menu10,
+    menu11,
+    menu12,
+    menu13,
+    menu14,
+    menu2,
+    menu3,
+    menu4,
+    menu5,
+    menu6,
+    menu7,
+    menu8,
+    product1,
+    product2,
+    product3,
+    product4,
+  ];
 }
 
 class Assets {
-  Assets._();
+  const Assets._();
 
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
-  static const $AssetsLogoGen logo = $AssetsLogoGen();
 }
 
 class AssetGenImage {
-  const AssetGenImage(
-    this._assetName, {
-    this.size,
-    this.flavors = const {},
-  });
+  const AssetGenImage(this._assetName, {this.size, this.flavors = const {}});
 
   final String _assetName;
 
@@ -346,7 +340,7 @@ class AssetGenImage {
     bool gaplessPlayback = true,
     bool isAntiAlias = false,
     String? package,
-    FilterQuality filterQuality = FilterQuality.low,
+    FilterQuality filterQuality = FilterQuality.medium,
     int? cacheWidth,
     int? cacheHeight,
   }) {
@@ -378,15 +372,8 @@ class AssetGenImage {
     );
   }
 
-  ImageProvider provider({
-    AssetBundle? bundle,
-    String? package,
-  }) {
-    return AssetImage(
-      _assetName,
-      bundle: bundle,
-      package: package,
-    );
+  ImageProvider provider({AssetBundle? bundle, String? package}) {
+    return AssetImage(_assetName, bundle: bundle, package: package);
   }
 
   String get path => _assetName;
@@ -395,17 +382,11 @@ class AssetGenImage {
 }
 
 class SvgGenImage {
-  const SvgGenImage(
-    this._assetName, {
-    this.size,
-    this.flavors = const {},
-  }) : _isVecFormat = false;
+  const SvgGenImage(this._assetName, {this.size, this.flavors = const {}})
+    : _isVecFormat = false;
 
-  const SvgGenImage.vec(
-    this._assetName, {
-    this.size,
-    this.flavors = const {},
-  }) : _isVecFormat = true;
+  const SvgGenImage.vec(this._assetName, {this.size, this.flavors = const {}})
+    : _isVecFormat = true;
 
   final String _assetName;
   final Size? size;
@@ -459,7 +440,8 @@ class SvgGenImage {
       placeholderBuilder: placeholderBuilder,
       semanticsLabel: semanticsLabel,
       excludeFromSemantics: excludeFromSemantics,
-      colorFilter: colorFilter ??
+      colorFilter:
+          colorFilter ??
           (color == null ? null : ColorFilter.mode(color, colorBlendMode)),
       clipBehavior: clipBehavior,
       cacheColorFilter: cacheColorFilter,

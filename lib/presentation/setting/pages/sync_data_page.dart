@@ -3,8 +3,8 @@ import '../../../core/constants/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/sync_order/sync_order_bloc.dart';
 import '../bloc/sync_product/sync_product_bloc.dart';
+import '../bloc/sync_category/sync_category_bloc.dart';
 import '../../../data/datasource/product_local_datasource.dart';
-
 
 class SyncDataPage extends StatefulWidget {
   const SyncDataPage({super.key});
@@ -124,6 +124,58 @@ class _SyncDataPageState extends State<SyncDataPage> {
                 );
               },
             ),
+            const SizedBox(height: 24),
+            _buildSyncSection(
+              context,
+              title: 'Sync Category',
+              description: 'Sinkronkan data category dari server.',
+              icon: Icons.receipt_long,
+              builder: (context) {
+                return BlocConsumer<SyncCategoryBloc, SyncCategoryState>(
+                  listener: (context, state) {
+                    state.maybeWhen(
+                      error: (message) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(message),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      },
+                      loaded: (categoryResponseModel) {
+                        ProductLocalDatasource.instance.deleteAllCategories();
+                        ProductLocalDatasource.instance.insertCategories(
+                          categoryResponseModel.data!,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Sync Category Success'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                      },
+                      orElse: () {},
+                    );
+                  },
+                  builder: (context, state) {
+                    return state.maybeWhen(
+                      loading: () => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      orElse: () => ElevatedButton.icon(
+                        icon: const Icon(Icons.sync_alt),
+                        label: const Text('Sync Category'),
+                        onPressed: () {
+                          context
+                              .read<SyncCategoryBloc>()
+                              .add(const SyncCategoryEvent.syncCategory());
+                        },
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -148,7 +200,11 @@ class _SyncDataPageState extends State<SyncDataPage> {
           children: [
             Row(
               children: [
-                Icon(icon, size: 32, color: AppColors.green,),
+                Icon(
+                  icon,
+                  size: 32,
+                  color: AppColors.green,
+                ),
                 const SizedBox(width: 12),
                 Text(
                   title,

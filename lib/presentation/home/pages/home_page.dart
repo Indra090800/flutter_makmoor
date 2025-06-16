@@ -18,6 +18,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/extensions/string_ext.dart';
 import '../bloc/local_product/local_product_bloc.dart';
 import '../../../data/model/response/table_model.dart';
+import '../bloc/local_category/local_category_bloc.dart';
 import '../../../core/extensions/build_context_ext.dart';
 import '../../../data/datasource/auth_local_datasource.dart';
 import '../../../data/model/response/product_response_model.dart';
@@ -50,7 +51,9 @@ class _HomePageState extends State<HomePage> {
     context
         .read<LocalProductBloc>()
         .add(const LocalProductEvent.getLocalProduct());
-    context.read<GetCategoriesBloc>().add(const GetCategoriesEvent.fetch());
+    context
+        .read<LocalCategoryBloc>()
+        .add(const LocalCategoryEvent.getLocalCategory());
   }
 
   void onSearchChanged(String value) {
@@ -64,18 +67,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   void onCategoryTap(int id) {
-  searchController.clear();
-  setState(() {
-    currentCategoryId = id;
-    filteredProducts = allProducts
-        .where((product) =>
-            (id == 0 || product.category?.id == id) &&
-            (searchController.text.isEmpty ||
-                product.name!.toLowerCase().contains(searchController.text.toLowerCase())))
-        .toList();
-  });
-}
-
+    searchController.clear();
+    setState(() {
+      currentCategoryId = id;
+      filteredProducts = allProducts
+          .where((product) =>
+              (id == 0 || product.category?.id == id) &&
+              (searchController.text.isEmpty ||
+                  product.name!
+                      .toLowerCase()
+                      .contains(searchController.text.toLowerCase())))
+          .toList();
+    });
+  }
 
   String? kasir;
   getKasir() async {
@@ -105,11 +109,12 @@ class _HomePageState extends State<HomePage> {
                           onChanged: onSearchChanged,
                         ),
                         const SizedBox(height: 24),
-                        BlocBuilder<GetCategoriesBloc, GetCategoriesState>(
+                        BlocBuilder<LocalCategoryBloc, LocalCategoryState>(
                           builder: (context, categoryState) {
+                            print('State: orElse');
                             return categoryState.maybeWhen(
                               orElse: () => SizedBox(),
-                              success: (categories) {
+                              loaded: (categories) {
                                 final updatedCategories = [
                                   CategoryModel(
                                       id: 0,
@@ -126,7 +131,7 @@ class _HomePageState extends State<HomePage> {
 
                                 return CustomTabBar(
                                   tabTitles: updatedCategories
-                                      .map((e) => e.name!)
+                                      .map((e) => e.name.toString())
                                       .toList(),
                                   initialTabIndex: 0,
                                   onTap: (index) => onCategoryTap(
@@ -153,20 +158,21 @@ class _HomePageState extends State<HomePage> {
                                                           .where((product) => product
                                                               .name!
                                                               .toLowerCase()
-                                                              .contains(searchController
-                                                                  .text
-                                                                  .toLowerCase()))
+                                                              .contains(
+                                                                  searchController
+                                                                      .text
+                                                                      .toLowerCase()))
                                                           .toList())
                                                   : products
                                                       .where((p) =>
                                                           p.category?.id ==
-                                                              category.id &&
+                                                              category
+                                                                  .id &&
                                                           (searchController.text
                                                                   .isEmpty ||
                                                               p.name!
                                                                   .toLowerCase()
-                                                                  .contains(
-                                                                      searchController.text.toLowerCase())))
+                                                                  .contains(searchController.text.toLowerCase())))
                                                       .toList();
 
                                               if (showingProducts.isEmpty) {

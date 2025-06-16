@@ -1,14 +1,12 @@
 import 'dart:developer';
-import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 import '../model/response/table_model.dart';
 import '../model/response/product_response_model.dart';
+import '../model/response/category_response_model.dart';
 import '../../presentation/home/models/order_model.dart';
 import '../../presentation/home/models/product_quantity.dart';
 import '../../presentation/table/models/draft_order_item.dart';
 import '../../presentation/table/models/draft_order_model.dart';
-
-
 
 class ProductLocalDatasource {
   ProductLocalDatasource._init();
@@ -19,6 +17,7 @@ class ProductLocalDatasource {
   final String tableOrder = 'orders';
   final String tableOrderItem = 'order_items';
   final String tableManagement = 'table_management';
+  final String categories = 'categories';
 
   static Database? _database;
 
@@ -122,6 +121,16 @@ class ProductLocalDatasource {
         price INTEGER
       )
     ''');
+
+    await db.execute('''
+      CREATE TABLE $categories (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+         category_id INTEGER,
+          name TEXT,
+          is_sync INTEGER,
+          image TEXT
+      )
+    ''');
   }
 
   Future<Database> _initDB(String filePath) async {
@@ -132,24 +141,20 @@ class ProductLocalDatasource {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB('dbresto30.db');
+    _database = await _initDB('dbmakmoor3.db');
     return _database!;
   }
 
   //save order
   Future<int> saveOrder(OrderModel order) async {
-    log("OrderModel:  ${order.toMap()}");
-
     final db = await instance.database;
     int id = await db.insert(tableOrder, order.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
 
     for (var item in order.orderItems) {
-      log("Item: ${item.toLocalMap(id)}");
       await db.insert(tableOrderItem, item.toLocalMap(id),
           conflictAlgorithm: ConflictAlgorithm.replace);
     }
-    log("Success Order: ${order.toMap()}");
     return id;
   }
 
@@ -408,5 +413,36 @@ class ProductLocalDatasource {
     await db.delete('draft_orders', where: 'id = ?', whereArgs: [id]);
     await db.delete('draft_order_items',
         where: 'id_draft_order = ?', whereArgs: [id]);
+  }
+
+  //insert, get, delete categories
+  Future<void> insertCategorie(CategoryModel categorie) async {
+    log("Product: ${categorie.toMap()}");
+    final db = await instance.database;
+    await db.insert(categories, categorie.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<void> insertCategories(List<CategoryModel> categorie) async {
+    final db = await instance.database;
+    for (var category in categorie) {
+      await db.insert(categories, category.toLocalMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace);
+      print(
+          'inserted success id: ${category.categoryId} | name: ${category.name}');
+    }
+  }
+
+  Future<List<CategoryModel>> getCategories() async {
+    final db = await instance.database;
+    final List<Map<String, dynamic>> maps = await db.query(categories);
+    return List.generate(maps.length, (i) {
+      return CategoryModel.fromLocalMap(maps[i]);
+    });
+  }
+
+  Future<void> deleteAllCategories() async {
+    final db = await instance.database;
+    await db.delete(categories);
   }
 }

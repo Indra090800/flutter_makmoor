@@ -32,7 +32,9 @@ import 'presentation/home/bloc/local_product/local_product_bloc.dart';
 import 'presentation/setting/bloc/add_discount/add_discount_bloc.dart';
 import 'presentation/setting/bloc/get_products/get_products_bloc.dart';
 import 'presentation/setting/bloc/sync_product/sync_product_bloc.dart';
+import 'presentation/home/bloc/local_category/local_category_bloc.dart';
 import 'presentation/home/bloc/online_checker/online_checker_bloc.dart';
+import 'presentation/setting/bloc/sync_category/sync_category_bloc.dart';
 import 'presentation/report/blocs/product_sales/product_sales_bloc.dart';
 import 'presentation/table/blocs/generate_table/generate_table_bloc.dart';
 import 'presentation/setting/bloc/get_categories/get_categories_bloc.dart';
@@ -131,6 +133,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => OnlineCheckerBloc(),
+        ),
+        BlocProvider(
+          create: (context) => LocalCategoryBloc(ProductLocalDatasource.instance),
+        ),
+        BlocProvider(
+          create: (context) => SyncCategoryBloc(CategoryRemoteDatasource()),
         ),
       ],
       child: MaterialApp(
