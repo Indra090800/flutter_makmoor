@@ -163,16 +163,18 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        home: screenWidth < 600
-            ? const Scaffold(
-                body: Center(
-                  child: Text(
-                    'App Khusus Screen With 600 (Tablet Version) ganti resolusi anda.',
-                    style: TextStyle(fontSize: 32),
-                  ),
-                ),
-              )
-            : FutureBuilder<bool>(
+        home:
+        //  screenWidth < 600
+        //     ? const Scaffold(
+        //         body: Center(
+        //           child: Text(
+        //             'App Khusus Screen With 600 (Tablet Version) ganti resolusi anda.',
+        //             style: TextStyle(fontSize: 32),
+        //           ),
+        //         ),
+        //       )
+        //     : 
+            FutureBuilder<bool>(
                 future: AuthLocalDataSource().isAuthDataExists(),
                 builder: (context, asyncSnapshot) {
                   if (asyncSnapshot.connectionState ==
