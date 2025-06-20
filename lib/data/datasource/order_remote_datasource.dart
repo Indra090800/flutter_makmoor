@@ -7,8 +7,6 @@ import '../model/response/summary_response_model.dart';
 import '../model/response/order_remote_datasource.dart';
 import '../../presentation/home/models/order_model.dart';
 
-
-
 class OrderRemoteDatasource {
   Future<bool> saveOrder(OrderModel orderModel) async {
     final authData = await AuthLocalDataSource().getAuthData();
@@ -20,6 +18,7 @@ class OrderRemoteDatasource {
       'Content-Type': 'application/json',
     });
 
+    print(response.body);
 
     if (response.statusCode == 200) {
       return true;

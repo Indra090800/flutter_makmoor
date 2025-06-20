@@ -607,7 +607,7 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
                                             isPayNow = false;
                                             setState(() {});
                                           },
-                                          label: 'Bayar Nanti')
+                                          label: 'To Go')
                                       : Button.filled(
                                           width: 180.0,
                                           height: 52.0,
@@ -615,7 +615,7 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
                                             isPayNow = false;
                                             setState(() {});
                                           },
-                                          label: 'Bayar Nanti',
+                                          label: 'Dine In',
                                         )
                                 ],
                               ),

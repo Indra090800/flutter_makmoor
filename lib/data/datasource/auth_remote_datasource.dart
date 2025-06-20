@@ -15,6 +15,7 @@ class AuthRemoteDatasource {
         'password': password,
       },
     );
+    print(response.body);
 
     if (response.statusCode == 200) {
       return Right(AuthResponseModel.fromJson(response.body));
@@ -23,16 +24,13 @@ class AuthRemoteDatasource {
     }
   }
 
-  Future<Either<String, bool>> logout() async{
+  Future<Either<String, bool>> logout() async {
     final authData = await AuthLocalDataSource().getAuthData();
     final url = Uri.parse('${Variable.baseUrl}/api/logout');
-    final response = await http.post(
-      url,
-      headers: {
-        'Authorization': 'Bearer ${authData.token}',
-        'Accept': 'application/json',
-      }
-    );
+    final response = await http.post(url, headers: {
+      'Authorization': 'Bearer ${authData.token}',
+      'Accept': 'application/json',
+    });
 
     if (response.statusCode == 200) {
       return const Right(true);
