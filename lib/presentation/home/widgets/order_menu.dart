@@ -75,21 +75,46 @@ class OrderMenu extends StatelessWidget {
                     data.quantity.toString(),
                   )),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    context
-                        .read<CheckoutBloc>()
-                        .add(CheckoutEvent.addItem(data.product));
+                BlocBuilder<CheckoutBloc, CheckoutState>(
+                  builder: (context, state) {
+                    int quantityInCart = 0;
+
+                    state.maybeWhen(
+                      loaded: (products, _, __, ___, ____, _____, ______,
+                          _______, ________) {
+                        final matching =
+                            products.where((e) => e.product == data.product);
+                        if (matching.isNotEmpty) {
+                          quantityInCart = matching.first.quantity;
+                        }
+                      },
+                      orElse: () {},
+                    );
+
+                    final remainingStock =
+                        (data.product.stock ?? 0) - quantityInCart;
+
+                    if (remainingStock <= 0) {
+                      return const SizedBox(); // stok habis, jangan tampilkan tombol
+                    }
+
+                    return GestureDetector(
+                      onTap: () {
+                        context
+                            .read<CheckoutBloc>()
+                            .add(CheckoutEvent.addItem(data.product));
+                      },
+                      child: Container(
+                        width: 30,
+                        height: 30,
+                        color: AppColors.white,
+                        child: const Icon(
+                          Icons.add_circle,
+                          color: AppColors.green,
+                        ),
+                      ),
+                    );
                   },
-                  child: Container(
-                    width: 30,
-                    height: 30,
-                    color: AppColors.white,
-                    child: const Icon(
-                      Icons.add_circle,
-                      color: AppColors.green,
-                    ),
-                  ),
                 ),
               ],
             ),

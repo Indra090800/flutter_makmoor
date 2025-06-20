@@ -60,6 +60,41 @@ class ProductCard extends StatelessWidget {
         // KONTEN CARD
         GestureDetector(
           onTap: () {
+            final checkoutState = context.read<CheckoutBloc>().state;
+
+            int quantityInCart = 0;
+
+            checkoutState.maybeWhen(
+              loaded: (products, _, __, ___, ____, _____, ______, _______,
+                  ________) {
+                final matching = products.where((e) => e.product == data);
+                if (matching.isNotEmpty) {
+                  quantityInCart = matching.first.quantity;
+                }
+              },
+              orElse: () {},
+            );
+
+            final remainingStock = (data.stock ?? 0) - quantityInCart;
+
+            if (remainingStock <= 0) {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Stok Habis'),
+                  content:
+                      const Text('Tidak bisa menambahkan, stok sudah habis.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('OK'),
+                    ),
+                  ],
+                ),
+              );
+              return;
+            }
+
             context.read<CheckoutBloc>().add(CheckoutEvent.addItem(data));
           },
           child: Container(
