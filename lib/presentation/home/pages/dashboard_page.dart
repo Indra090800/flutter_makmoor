@@ -119,36 +119,42 @@ class _DashboardPageState extends State<DashboardPage> {
                       BlocBuilder<OnlineCheckerBloc, OnlineCheckerState>(
                         builder: (context, state) {
                           return state.maybeWhen(
-                            orElse: () => Container(
-                              width: 40,
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              padding: const EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                color: AppColors.red,
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              child: const Icon(
-                                Icons.signal_wifi_off,
-                                color: AppColors.white,
+                            orElse: () => Tooltip(
+                              message: 'Not Connected',
+                              child: Container(
+                                width: 40,
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                padding: const EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                  color: AppColors.red,
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                child: const Icon(
+                                  Icons.signal_wifi_off,
+                                  color: AppColors.white,
+                                ),
                               ),
                             ),
                             online: () {
                               context.read<SyncOrderBloc>().add(
                                     const SyncOrderEvent.syncOrder(),
                                   );
-                              return Container(
-                                width: 40,
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                padding: const EdgeInsets.all(8.0),
-                                decoration: BoxDecoration(
-                                  color: AppColors.green,
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                child: const Icon(
-                                  Icons.wifi,
-                                  color: AppColors.white,
+                              return Tooltip(
+                                message: 'Connected',
+                                child: Container(
+                                  width: 40,
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 16),
+                                  padding: const EdgeInsets.all(8.0),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.green,
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  child: const Icon(
+                                    Icons.wifi,
+                                    color: AppColors.white,
+                                  ),
                                 ),
                               );
                             },

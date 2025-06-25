@@ -30,7 +30,7 @@ class _TablePageState extends State<TablePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 "Table Management",
                 style: TextStyle(
                   fontSize: 24.0,
@@ -42,7 +42,7 @@ class _TablePageState extends State<TablePage> {
                 onPressed: () {
                   showDialog(
                     context: context,
-                    builder: (context) => FormTableDialog(),
+                    builder: (context) => const FormTableDialog(),
                   );
                 },
                 label: 'Generate Table',
@@ -51,12 +51,12 @@ class _TablePageState extends State<TablePage> {
               ),
             ],
           ),
-          SpaceHeight(24.0),
+          const SpaceHeight(24.0),
           BlocBuilder<GetTableBloc, GetTableState>(
             builder: (context, state) {
               return state.maybeWhen(
                 orElse: () {
-                  return SizedBox.shrink();
+                  return const SizedBox.shrink();
                 },
                 loading: () {
                   return const CircularProgressIndicator();

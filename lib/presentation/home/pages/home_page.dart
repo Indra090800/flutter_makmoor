@@ -23,7 +23,6 @@ import '../../../core/extensions/build_context_ext.dart';
 import '../../../data/datasource/auth_local_datasource.dart';
 import '../../../data/model/response/product_response_model.dart';
 import '../../../data/model/response/category_response_model.dart';
-import '../../setting/bloc/get_categories/get_categories_bloc.dart';
 
 class HomePage extends StatefulWidget {
   final bool isTable;
@@ -43,6 +42,7 @@ class _HomePageState extends State<HomePage> {
   List<Product> allProducts = [];
   List<Product> filteredProducts = [];
   int currentCategoryId = 0;
+  int subTotal = 0;
 
   @override
   void initState() {
@@ -158,21 +158,20 @@ class _HomePageState extends State<HomePage> {
                                                           .where((product) => product
                                                               .name!
                                                               .toLowerCase()
-                                                              .contains(
-                                                                  searchController
-                                                                      .text
-                                                                      .toLowerCase()))
+                                                              .contains(searchController
+                                                                  .text
+                                                                  .toLowerCase()))
                                                           .toList())
                                                   : products
                                                       .where((p) =>
                                                           p.category?.id ==
-                                                              category
-                                                                  .id &&
+                                                              category.id &&
                                                           (searchController.text
                                                                   .isEmpty ||
                                                               p.name!
                                                                   .toLowerCase()
-                                                                  .contains(searchController.text.toLowerCase())))
+                                                                  .contains(
+                                                                      searchController.text.toLowerCase())))
                                                       .toList();
 
                                               if (showingProducts.isEmpty) {
@@ -481,7 +480,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               BlocBuilder<CheckoutBloc, CheckoutState>(
                                 builder: (context, state) {
-                                  final price = state.maybeWhen(
+                                  subTotal = state.maybeWhen(
                                       orElse: () => 0,
                                       loaded: (products,
                                           discountModel,
@@ -505,7 +504,7 @@ class _HomePageState extends State<HomePage> {
                                       });
 
                                   return Text(
-                                    price.currencyFormatRp,
+                                    subTotal.currencyFormatRp,
                                     style: const TextStyle(
                                         color: AppColors.green,
                                         fontWeight: FontWeight.bold,
@@ -528,10 +527,28 @@ class _HomePageState extends State<HomePage> {
                               horizontal: 24.0, vertical: 16.0),
                           child: Button.filled(
                             onPressed: () {
-                              context.push(ConfirmPaymentPage(
-                                isTable: widget.isTable,
-                                table: widget.table,
-                              ));
+                              if (subTotal == 0) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text('Peringatan'),
+                                    content: const Text(
+                                        'Silakan pilih produk terlebih dahulu sebelum melanjutkan pembayaran.'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              } else {
+                                context.push(ConfirmPaymentPage(
+                                  isTable: widget.isTable,
+                                  table: widget.table,
+                                ));
+                              }
                             },
                             label: 'Lanjutkan Pembayaran',
                           ),

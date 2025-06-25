@@ -59,7 +59,7 @@ class _SalesPageState extends State<SalesPage> {
                   loaded: (orders) {
                     log("message: ${orders.length}");
                     if (orders.isEmpty) {
-                      return Center(
+                      return const Center(
                         child: Text(
                           "Belum ada transaksi saat ini. ",
                           style: TextStyle(

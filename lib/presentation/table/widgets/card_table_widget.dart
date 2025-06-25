@@ -5,11 +5,13 @@ import '../../../components/buttons.dart';
 import '../models/draft_order_model.dart';
 import '../pages/payment_table_page.dart';
 import '../../../core/constants/colors.dart';
+import '../../home/pages/dashboard_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/extensions/date_time_ext.dart';
 import '../../home/bloc/checkout/checkout_bloc.dart';
 import '../../../data/model/response/table_model.dart';
 import '../../../core/extensions/build_context_ext.dart';
+import '../../home/bloc/status_table/status_table_bloc.dart';
 import '../../../data/datasource/product_local_datasource.dart';
 
 class CardTableWidget extends StatefulWidget {
@@ -58,7 +60,7 @@ class _CardTableWidgetState extends State<CardTableWidget> {
         children: [
           Text(
             'Table ${widget.table.tableNumber}',
-            style: TextStyle(
+            style: const TextStyle(
               color: AppColors.black,
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -68,7 +70,7 @@ class _CardTableWidgetState extends State<CardTableWidget> {
             widget.table.status == 'available'
                 ? widget.table.status
                 : "${widget.table.status} - ${DateTime.parse(widget.table.startTime).toFormattedTime()}",
-            style: TextStyle(
+            style: const TextStyle(
               color: AppColors.black,
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -85,14 +87,36 @@ class _CardTableWidgetState extends State<CardTableWidget> {
                     table: widget.table,
                   ));
                 } else {
-                  context.read<CheckoutBloc>().add(
-                        CheckoutEvent.loadDraftOrder(data!),
-                      );
-                  log("Data Draft Order: ${data!.toMap()}");
-                  context.push(PaymentTablePage(
-                    table: widget.table,
-                    draftOrder: data!,
-                  ));
+                  if (data == null) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const DashboardPage(),
+                      ),
+                    );
+                    final newTable = TableModel(
+                      id: widget.table!.id,
+                      tableNumber: widget.table!.tableNumber,
+                      status: 'available',
+                      orderId: 0,
+                      paymentAmount: 0,
+                      startTime: DateTime.now().toIso8601String(),
+                    );
+                    context.read<StatusTableBloc>().add(
+                          StatusTableEvent.statusTabel(
+                            newTable,
+                          ),
+                        );
+                  } else {
+                    context.read<CheckoutBloc>().add(
+                          CheckoutEvent.loadDraftOrder(data!),
+                        );
+                    log("Data Draft Order: ${data!.toMap()}");
+                    context.push(PaymentTablePage(
+                      table: widget.table,
+                      draftOrder: data!,
+                    ));
+                  }
                 }
                 //   await showDialog<void>(
                 //     context: context,

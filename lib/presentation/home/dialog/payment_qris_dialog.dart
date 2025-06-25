@@ -9,6 +9,7 @@ import '../models/product_quantity.dart';
 import '../../../core/constants/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../widgets/success_payment_dialog.dart';
+import '../../../data/model/response/table_model.dart';
 import 'package:widgets_to_image/widgets_to_image.dart';
 import '../../../core/extensions/build_context_ext.dart';
 import '../../../data/dataoutputs/print_dataoutputs.dart';
@@ -32,8 +33,10 @@ class PaymentQrisDialog extends StatefulWidget {
   final int price;
   final int totalQty;
   final int subTotal;
+  final TableModel? table;
+  final bool isDine;
   const PaymentQrisDialog({
-    super.key,
+    Key? key,
     required this.items,
     required this.discount,
     required this.discountAmount,
@@ -48,7 +51,9 @@ class PaymentQrisDialog extends StatefulWidget {
     required this.price,
     required this.totalQty,
     required this.subTotal,
-  });
+    this.table,
+    required this.isDine,
+  }) : super(key: key);
 
   @override
   State<PaymentQrisDialog> createState() => _PaymentQrisDialogState();
@@ -141,6 +146,8 @@ class _PaymentQrisDialogState extends State<PaymentQrisDialog> {
                             totalTax: widget.tax,
                             totalDiscount: widget.discountAmount,
                             subTotal: widget.subTotal,
+                            table: widget.tableNumber != 0 ? widget.table : null,
+                            isDine: widget.tableNumber == 0 ? false : true,
                             normalPrice: widget.price,
                             totalService: widget.serviceCharge,
                             draftName: widget.customerName,

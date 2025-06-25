@@ -845,6 +845,8 @@ class _PaymentTablePageState extends State<PaymentTablePage> {
                                                   totalDiscount:
                                                       totalDiscount.toInt(),
                                                   subTotal: subTotal.toInt(),
+                                                  table: null,
+                                                  isDine: false,
                                                   normalPrice: price,
                                                   totalService: 0,
                                                   draftName:
@@ -866,6 +868,8 @@ class _PaymentTablePageState extends State<PaymentTablePage> {
                                                   customerName:
                                                       customerController.text,
                                                   discount: discount,
+                                                  table: null,
+                                                  isDine: false,
                                                   paymentAmount:
                                                       totalPriceController.text
                                                           .toIntegerFromText,

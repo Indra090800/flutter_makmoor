@@ -11,10 +11,18 @@ class ProductRemoteDatasource {
   Future<Either<String, ProductResponseModel>> getProducts() async {
     final authData = await AuthLocalDataSource().getAuthData();
     final url = Uri.parse('${Variable.baseUrl}/api/products');
-    final response = await http.get(url, headers: {
+    final Map<String, String> headers = {
       'Authorization': 'Bearer ${authData.token}',
       'Accept': 'application/json',
-    });
+    };
+    final response = await http.get(url, headers: headers
+    //  {
+    //   'Authorization': 'Bearer ${authData.token}',
+    //   'Accept': 'application/json',
+    // }
+    );
+    log(response.statusCode.toString());
+    log(response.body);
 
     if (response.statusCode == 200) {
       return Right(ProductResponseModel.fromJson(response.body));

@@ -51,7 +51,7 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
   void initState() {
     context
         .read<GetTableStatusBloc>()
-        .add(GetTableStatusEvent.getTablesStatus('available'));
+        .add(const GetTableStatusEvent.getTablesStatus('available'));
     super.initState();
   }
 
@@ -85,7 +85,7 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                const Text(
                                   'Konfirmasi',
                                   style: TextStyle(
                                     color: AppColors.green,
@@ -97,7 +97,7 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
                                   widget.isTable
                                       ? 'Orders Table ${widget.table?.tableNumber}'
                                       : 'Orders #1',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -245,7 +245,7 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            const Text(
                               'Diskon',
                               style: TextStyle(color: AppColors.grey),
                             ),
@@ -294,7 +294,7 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
                                 discountAmount = finalDiscount.toInt();
                                 return Text(
                                   '$discount % (${finalDiscount.toInt().currencyFormatRp})',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: AppColors.green,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -369,7 +369,7 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
                                 final subTotal =
                                     price - (discount / 100 * price);
                                 final finalTax = subTotal * (tax / 100);
-                                final finalDiscount = discount / 100 * subTotal;
+                                // final finalDiscount = discount / 100 * subTotal;
                                 // discountAmountValue = finalDiscount.toInt();
                                 // taxFinal = finalTax.toInt();
                                 return Text(
@@ -598,7 +598,7 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
                                             setState(() {});
                                           },
                                           label: 'Bayar Sekarang'),
-                                  SpaceWidth(16),
+                                  const SpaceWidth(16),
                                   isPayNow
                                       ? Button.outlined(
                                           width: 180.0,
@@ -607,7 +607,7 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
                                             isPayNow = false;
                                             setState(() {});
                                           },
-                                          label: 'To Go')
+                                          label: 'Bayar Nanti')
                                       : Button.filled(
                                           width: 180.0,
                                           height: 52.0,
@@ -615,13 +615,13 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
                                             isPayNow = false;
                                             setState(() {});
                                           },
-                                          label: 'Dine In',
+                                          label: 'Bayar Nanti',
                                         )
                                 ],
                               ),
                             ],
                             const SpaceHeight(8.0),
-                            if (!isPayNow) ...[
+                            if (!isPayNow || isPayNow) ...[
                               const Divider(),
                               const SpaceHeight(8.0),
                               const Text(
@@ -1007,30 +1007,34 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
                                                 ),
                                               );
                                             } else if (isPayNow) {
-                                              // context.read<CheckO>().add(
-                                              //     OrderEvent.addPaymentMethod(
-                                              //         items,
-                                              //         totalPrice,
-                                              //         finalTax,
-                                              //         discount != null
-                                              //             ? discount.value
-                                              //                 .replaceAll(
-                                              //                     '.00', '')
-                                              //                 .toIntegerFromText
-                                              //             : 0,
-                                              //         finalDiscountAmount,
-                                              //         finalService,
-                                              //         subTotal,
-                                              //         totalPriceController.text
-                                              //             .toIntegerFromText,
-                                              //         auth?.user.name ?? '-',
-                                              //         totalQuantity,
-                                              //         auth?.user.id ?? 1,
-                                              //         isCash
-                                              //             ? 'Cash'
-                                              //             : 'QR Pay'));
+                                              final selectedTable =
+                                                  widget.isTable
+                                                      ? widget.table
+                                                      : selectTable;
+                                              if (selectedTable != null) {
+                                                final newTabel = TableModel(
+                                                  id: selectedTable.id,
+                                                  tableNumber: selectedTable
+                                                          .tableNumber ??
+                                                      0,
+                                                  status: 'occupied',
+                                                  paymentAmount: priceValue,
+                                                  orderId:
+                                                      0, // atau null jika belum ada orderId langsung
+                                                  startTime: DateTime.now()
+                                                      .toIso8601String(),
+                                                );
+
+                                                context
+                                                    .read<StatusTableBloc>()
+                                                    .add(
+                                                      StatusTableEvent
+                                                          .statusTabel(
+                                                              newTabel),
+                                                    );
+                                              }
+
                                               if (isCash) {
-                                                log("discountAmountValue: $totalDiscount");
                                                 context.read<OrderBloc>().add(
                                                     OrderEvent.order(
                                                         items,
@@ -1042,7 +1046,12 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
                                                             .text
                                                             .toIntegerFromText,
                                                         customerController.text,
-                                                        0,
+                                                        widget.isTable
+                                                            ? widget.table!
+                                                                .tableNumber
+                                                            : selectTable
+                                                                    ?.tableNumber ??
+                                                                0,
                                                         'completed',
                                                         'paid',
                                                         'Cash',
@@ -1060,6 +1069,11 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
                                                         totalDiscount.toInt(),
                                                     subTotal: subTotal.toInt(),
                                                     normalPrice: price,
+                                                    table: widget.isTable
+                                                        ? widget.table
+                                                        : selectTable,
+                                                    isDine: widget.isTable ||
+                                                        (selectTable != null),
                                                     totalService:
                                                         totalServiceCharge
                                                             .toInt(),
@@ -1079,6 +1093,11 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
                                                     discountAmount:
                                                         totalDiscount.toInt(),
                                                     subTotal: subTotal.toInt(),
+                                                    table: widget.isTable
+                                                        ? widget.table
+                                                        : selectTable,
+                                                    isDine: widget.isTable ||
+                                                        (selectTable != null),
                                                     customerName:
                                                         customerController.text,
                                                     discount: discount,
@@ -1087,7 +1106,13 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
                                                             .text
                                                             .toIntegerFromText,
                                                     paymentMethod: 'Qris',
-                                                    tableNumber: 0,
+                                                    
+                                                    tableNumber: widget.isTable
+                                                        ? widget
+                                                            .table!.tableNumber
+                                                        : selectTable
+                                                                ?.tableNumber ??
+                                                            0,
                                                     paymentStatus: 'paid',
                                                     serviceCharge: 0,
                                                     status: 'completed',

@@ -94,7 +94,7 @@ class _SaveOrderDialogState extends State<SaveOrderDialog> {
                               widget.data,
                               widget.table.tableNumber,
                               widget.draftName,
-                              'Cashier Ali',
+                              'Kasir',
                               int.parse(sizeReceipt));
                       await PrintBluetoothThermal.writeBytes(printValue);
                     },
